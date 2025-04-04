@@ -1,7 +1,12 @@
 /**
- * Initializes a wall with a description, name
- * and interactableArray.
+ * Class: Player.java
  * @author Kevin Kim
+ * @version 1.0
+ * Course: CSE 201 Spring 2025
+ * Written: April 4, 2025
+ * 
+ * Purpose: Initializes a wall with a description, name
+ *          and interactableArray.
  */
 import java.util.*;
 
