@@ -1,7 +1,12 @@
 /**
- * Initializes a Room with a desription, walls,
- * roomInventory, lockType, and hasNPC.
+ * Class: Room.java
  * @author Landen Burns
+ * @version 1.0
+ * Course: CSE 201 Spring 2025
+ * Written: April 2, 2025
+ * 
+ * Purpose: Initializes a Room with description, walls, roomInventory,
+ *          lockType, and hasNPC.
  */
 import java.util.ArrayList;
 
