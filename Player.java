@@ -75,7 +75,7 @@ public class Player {
      * @return whether or not the addition was successful
      */
     public boolean addItem(Item item) {
-        this.inventory.add(item);
+        return this.inventory.add(item);
     }
 
     /**
@@ -84,7 +84,7 @@ public class Player {
      * @return whether or not the removal was successful
      */
     public boolean removeItem(Item item) {
-        this.inventory.remove(item);
+        return this.inventory.remove(item);
     }
 
     /**
