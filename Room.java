@@ -91,4 +91,20 @@ public class Room {
         return this.hasNPC;
     }
 
+    /**
+     * Sets the Room's description.
+     * @param des the new description of the Room
+     */
+    public void setDescription(String des) {
+        this.description = des;
+    }
+
+    /**
+     * Sets the Room's inventory.
+     * @param inventory the Items in the Room
+     */
+    public void setInventory(ArrayList<Item> inventory) {
+        this.roomInventory = inventory;
+    }
+
 }
