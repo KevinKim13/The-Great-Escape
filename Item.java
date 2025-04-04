@@ -1,7 +1,11 @@
 /**
- * Initalizes an Item object with a description, itemType, and
- * itemSuccess.
+ * Class: Item.java
  * @author Landen Burns
+ * @version 1.0
+ * Course: CSE 201 Spring 2025
+ * Written: April 2, 2025
+ * 
+ * Purpose: Initializes an Item with description, itemType, and itemSuccess.
  */
 
 public class Item {
