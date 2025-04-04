@@ -1,5 +1,5 @@
 /**
- * Class: Player.java
+ * Class: Wall.java
  * @author Kevin Kim
  * @version 1.0
  * Course: CSE 201 Spring 2025
