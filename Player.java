@@ -1,7 +1,11 @@
 /**
- * Initalizes an Player object with an inventory, room, and
- * soundLevel.
+ * Class: Player.java
  * @author Landen Burns
+ * @version 1.0
+ * Course: CSE 201 Spring 2025
+ * Written: April 2, 2025
+ * 
+ * Purpose: Initializes a Player with inventory, room, and soundLevel.
  */
 import java.util.ArrayList;
 
