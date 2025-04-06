@@ -1,3 +1,12 @@
+/**
+ * Class: Game.java
+ * @author Landen Burns
+ * @version 1.0
+ * Course: CSE 201 Spring 2025
+ * Written: April 5, 2025
+ * 
+ * Purpose: A Prototype of our game that demonstrates the use of our classes.
+ */
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -54,6 +63,7 @@ public class Game {
             System.exit(0);
         }
 
+        in.close();
     }
 
 }
