@@ -1,75 +1,110 @@
 /**
  * Class: Wall.java
- * @author Kevin Kim
- * @version 1.0
+ * @author Kevin Kim, Shane Paton
+ * @version 2.0
  * Course: CSE 201 Spring 2025
- * Written: April 4, 2025
+ * Written: April 27, 2025
  * 
- * Purpose: Initializes a wall with a description, name
- *          and interactableArray.
+ * Purpose: Initializes a wall with a description, inspectText,
+ *          puzzle, item, and availableActions.
  */
-import java.util.*;
 
 public class Wall {
 
-    // Instance Variables
-
-    private String name;
+    // Instance Variables -------------------------------------------
     private String desc;
-    private ArrayList<String> interactableArray;
+    private String inspectText;
+    private InputLockPuzzle puzzle;
+    private Item item;
+    private String[] availableActions;
 
-    // Constructors
 
+    // Constructors -------------------------------------------------
     /**
-     * Default Constructor.
+     * Initializes a wall with a desc, inspectText, puzzle, item, and 
+     * availableActions.
+     * @param desc
+     * @param inspectText
      */
-    public Wall() {
-        this.name = "";
-        this.desc = "";
-        this.interactableArray = null;
-    }
-    
-    /**
-     * Constructor with parameters supplied for all instance variables.
-     * 
-     * @param name the name of the wall.
-     * @param desc the description of the wall.
-     * @param interactableArray a list of all interactable things on that wall. 
-     */
-    public Wall(String name, String desc, ArrayList<String> interactableArray) {
-        this.name = name;
+    public Wall(String desc, String inspectText) {
         this.desc = desc;
-        this.interactableArray = interactableArray;
+        this.inspectText = inspectText;
+        this.puzzle = null;
+        this.item = null;
+        this.availableActions = new String[0];
     }
 
-    // Methods
-
+    
+    // Methods ------------------------------------------------------
     /**
-     * Returns the name of the wall.
-     * 
-     * @return the name of the wall.
+     * Returns the wall's description.
+     * @return the wall's description
      */
-    public String getWallName() {
-        return name;
-    }
-
-    /**
-     * Returns the description of the wall.
-     * 
-     * @return the description of the wall.
-     */
-    public String getWallDesc() {
+    public String getDescription() {
         return desc;
     }
 
     /**
-     * Returns an array of interactables for the wall.
-     * 
-     * @return an array of interactbles for the wall.
+     * Returns the text to be displayed when inspecting the wall.
+     * @return the wall's inspectText
      */
-    public ArrayList<String> getWallInters() {
-        return interactableArray;
+    public String getInspectText() {
+        return inspectText;
     }
 
-    
+    /**
+     * Returns the wall's puzzle.
+     * @return the wall's puzzle
+     */
+    public InputLockPuzzle getPuzzle() {
+        return puzzle;
+    }
+
+    /**
+     * Sets a wall with a puzzle.
+     * @param puzzle the wall's puzzle
+     */
+    public void setPuzzle(InputLockPuzzle puzzle) {
+        this.puzzle = puzzle;
+    }
+
+    /**
+     * Returns whether or not a wall has a puzzle.
+     * @return whether or not the wall has a puzzle
+     */
+    public boolean hasPuzzle() {
+        return puzzle != null;
+    }
+
+    /**
+     * Returns the wall's item.
+     * @return the wall's item
+     */
+    public Item getItem() {
+        return item;
+    }
+
+    /**
+     * Sets an item to a wall.
+     * @param item the wall's new item
+     */
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    /**
+     * Returns the available actions to be performed on the wall.
+     * @return the wall's availableActions
+     */
+    public String[] getAvailableActions() {
+        return availableActions;
+    }
+
+    /**
+     * Sets the available actions that can be performed on the wall.
+     * @param actions the wall's new availableActions
+     */
+    public void setAvailableActions(String[] actions) {
+        this.availableActions = actions;
+    }
 }

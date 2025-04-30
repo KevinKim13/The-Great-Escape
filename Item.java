@@ -1,71 +1,56 @@
 /**
  * Class: Item.java
- * @author Landen Burns
- * @version 1.0
+ * @author Will Krajcirik
+ * @version 2.0
  * Course: CSE 201 Spring 2025
- * Written: April 2, 2025
+ * Written: April 27, 2025
  * 
- * Purpose: Initializes an Item with description, itemType, and itemSuccess.
+ * Purpose: Initializes an Item with a name, type, and chance.
  */
 
 public class Item {
+    // Instance Variables -------------------------------------------
+    private String name;
+    private String type;
+    private double chance;
 
-    // Instance Variables ------------------------------------------
-    private String description;
-    private String itemType;
-    private double itemSuccess;
 
-
-    // Constructors ------------------------------------------------
-
+    // Consructors ---------------------------------------------------
     /**
-     * Workhorse Constructor. Initializes an Item with all instance
-     * variables specified.
-     * @param description a detailed description of the Item
-     * @param type the Item's type
-     * @param success the Item's probability to defeat the kidnapper
+     * Initializes an Item with a name, type, and chance.
+     * @param name the item's name
+     * @param type the item's type (Key or Weapon)
+     * @param chance the chance to defeat the kidnapper
      */
-    public Item(String description, String type, double success) {
-        this.description = description;
-        this.itemType = type;
-        this.itemSuccess = success;
-    }
-
-    /**
-     * Empty Constructor. Initializes an Item with all instance
-     * variables set to zero or null values.
-     */
-    public Item() {
-        this.description = "";
-        this.itemType = "";
-        this.itemSuccess = 0.0;
+    public Item(String name, String type, double chance) {
+        this.name = name;
+        this.type = type;
+        this.chance = chance;
     }
 
 
-    // Methods -----------------------------------------------------
-    
+    // Methods ------------------------------------------------------
     /**
-     * Returns a detailed description of the Item.
-     * @return the Item's description
+     * Returns the item's name.
+     * @return the item's name
      */
-    public String getDescription() {
-        return description;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Returns a the Item's type.
-     * @return the Item's type
+     * Returns the item's type.
+     * @return the item's type
      */
-    public String getItemType() {
-        return itemType;
+    public String getType() {
+        return type;
     }
 
     /**
-     * Returns the Item's success chance to defeat kidnapper.
-     * @return the Item's percent probability
+     * Returns the item's chance to defeat the kidnapper.
+     * @return the item's chance
      */
-    public double getItemSuccess() {
-        return itemSuccess;
+    public double getChance() {
+        return chance;
     }
-
 }

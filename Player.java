@@ -1,106 +1,96 @@
 /**
  * Class: Player.java
- * @author Landen Burns
- * @version 1.0
+ * @author Kevin Kim, Landen Burns
+ * @version 2.0
  * Course: CSE 201 Spring 2025
- * Written: April 2, 2025
+ * Written: April 28, 2025
  * 
- * Purpose: Initializes a Player with inventory, room, and soundLevel.
+ * Purpose: Initializes a Player with inventory, currentRoom, and directionFacing.
  */
-import java.util.ArrayList;
+import java.util.*;
 
 public class Player {
 
-    // Instance Variables -----------------------------------------
-    private ArrayList<Item> inventory;
-    private Room room;
-    private int soundLevel;
+    // Instance Variables -------------------------------------------
+    private List<Item> inventory;
+    private Room currentRoom;
+    private int directionFacing; // 0 = North, 1 = East, 2 = South, 3 = West
 
 
-    // Constructors -----------------------------------------------
-
+    // Constructors -------------------------------------------------
     /**
-     * Workhorse Constructor. Initializes a Player with all instance
-     * variables specified.
-     * @param inventory the Player's list of acquired Items
-     * @param room the current location of the Player
-     * @param lvl the Player's sound level
+     * Initializes a Player with an inventory, startRoom, and directionFacing.
+     * @param inventory the player's inventory
+     * @param startRoom the player's starting room
+     * @param directionFacing the the direction (N,E,S,W) the player is facing
      */
-    public Player(ArrayList<Item> inventory, Room room, int lvl) {
+    public Player(List<Item> inventory, Room startRoom, int directionFacing) {
         this.inventory = inventory;
-        this.room = room;
-        this.soundLevel = lvl;
+        this.currentRoom = startRoom;
+        this.directionFacing = directionFacing;
+    }
+
+
+    // Methods ------------------------------------------------------
+    /**
+     * Returns the room the player is currently in.
+     * @return the player's current room
+     */
+    public Room getCurrentRoom() {
+        return currentRoom;
     }
 
     /**
-     * Empty Constructor. Intializes a Player with all instance
-     * variables set to zero or null values.
+     * Sets the room the player is currently in.
+     * @param room the player's new room
      */
-    public Player() {
-        this.inventory = null;
-        this.room = null;
-        this.soundLevel = 0;
-    }
-
-
-    // Methods ----------------------------------------------------
-
-    /**
-     * Return the Player's current location.
-     * @return the Player's current Room
-     */
-    public Room getRoom() {
-        return this.room;
+    public void setCurrentRoom(Room room) {
+        this.currentRoom = room;
     }
 
     /**
-     * Sets the Player's current location.
-     * @param room the Player's new Room
+     * Returns the cardinal direction the player is facing.
+     * @return the direction the player is facing
      */
-    public void setRoom(Room room) {
-        this.room = room;
+    public int getDirectionFacing() {
+        return directionFacing;
     }
 
     /**
-     * Returns the Player's inventory of Items.
-     * @return the Player's inventory
+     * Returns the player's inventory of items.
+     * @return the player's inventory
      */
-    public ArrayList<Item> getInventory() {
-        return this.inventory;
+    public List<Item> getInventory() {
+        return inventory;
     }
 
     /**
-     * Adds an Item to the Player's inventory.
-     * @param item the new Item being added
-     * @return whether or not the addition was successful
+     * Adds an item to the player's inventory.
+     * @param item item to be added
      */
-    public boolean addItem(Item item) {
-        return this.inventory.add(item);
+    public void addItem(Item item) {
+        inventory.add(item);
     }
 
     /**
-     * Removes an Item from the Player's inventory.
-     * @param item the Item being removed
-     * @return whether or not the removal was successful
+     * Removes an item from the player's inventory.
+     * @param item
      */
-    public boolean removeItem(Item item) {
-        return this.inventory.remove(item);
+    public void removeItem(Item item) {
+        inventory.remove(item);
     }
 
     /**
-     * Returns the Player's current sound level.
-     * @return the Player's sound level
+     * Checks the player inventory for an item of a certain type.
+     * @param type the type being looked for
+     * @return whether or not the player has an item of that type
      */
-    public int getSoundLevel() {
-        return soundLevel;
+    public boolean hasItemOfType(String type) {
+        for (Item item : inventory) {
+            if (item.getType().equalsIgnoreCase(type)) {
+                return true;
+            }
+        }
+        return false;
     }
-
-    /**
-     * Sets the Player's sound level.
-     * @param lvl the Player's new sound level
-     */
-    public void setSoundLevel(int lvl) {
-        this.soundLevel = lvl;
-    }
-
 }
