@@ -9,7 +9,6 @@
  */
 
 public class Item {
-
     // Instance Variables -------------------------------------------
     private String name;
     private String type;
