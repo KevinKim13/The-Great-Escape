@@ -34,25 +34,28 @@ public class GameMain {
 
             switch (choice) {
                 case "1":
-                    handleWallInspection(currentRoom);
+                    handleWallListing(currentRoom);
                     break;
                 case "2":
-                    handleWallInteraction(scanner, currentRoom);
+                    handleWallInspection(scanner, currentRoom);
                     break;
                 case "3":
-                    handleItemPickup(scanner, currentRoom, player);
+                    handleWallInteraction(scanner, currentRoom);
                     break;
                 case "4":
-                    handleMovement(scanner, currentRoom, player);
+                    handleItemPickup(scanner, currentRoom, player);
                     break;
                 case "5":
-                    printInventory(player);
+                    handleMovement(scanner, currentRoom, player);
                     break;
                 case "6":
+                    printInventory(player);
+                    break;
+                case "7":
                     System.out.println("Thank you for playing! Goodbye!");
                     return;
                 default:
-                    System.out.println("Invalid option. Please enter a number between 1 and 6.");
+                    System.out.println("Invalid option. Please enter a number between 1 and 7.");
             }
         }
     }
@@ -65,11 +68,12 @@ public class GameMain {
     private static void printMenu() {
         System.out.println("\nWhat would you like to do?");
         System.out.println("1. Look at walls");
-        System.out.println("2. Interact with a wall");
-        System.out.println("3. Pick up an item");
-        System.out.println("4. Move");
-        System.out.println("5. Check inventory");
-        System.out.println("6. Quit");
+        System.out.println("2. Inspect a wall");
+        System.out.println("3. Interact with a puzzle");
+        System.out.println("4. Pick up an item");
+        System.out.println("5. Move");
+        System.out.println("6. Check inventory");
+        System.out.println("7. Quit");
         System.out.print("> ");
     }
 
@@ -77,12 +81,28 @@ public class GameMain {
      * Lists available walls in the player's current room.
      * @param room the player's current room
      */
-    private static void handleWallInspection(Room room) {
+    private static void handleWallListing(Room room) {
         for (int i = 0; i < 4; i++) {
             Wall wall = room.getWalls()[i];
             if (wall != null) {
                 System.out.println(directions[i] + ": " + wall.getDescription());
             }
+        }
+    }
+
+    /**
+     * Gives player more detail about a specific wall.
+     * @param scanner the game's scanner
+     * @param room the player's current room
+     */
+    private static void handleWallInspection(Scanner scanner, Room room) {
+        System.out.println("Which wall? (0-N, 1-E, 2-S, 3-W)");
+        int index = Integer.parseInt(scanner.nextLine());
+        Wall wall = room.getWalls()[index];
+        if (wall == null) {
+            System.out.println("Nothing interesting here.");
+        } else {
+            System.out.println(wall.getInspectText());
         }
     }
 
@@ -162,12 +182,16 @@ public class GameMain {
      * @param player the game's player
      */
     private static void handleMovement(Scanner scanner, Room room, Player player) {
+        String room4Desc = "You go upstairs and are now in a dingy kitchen.\nThe kidnapper is preoccupied with watching tv and eating.";
         for (int i = 0; i < 4; i++) {
             System.out.println(i + ". Go " + directions[i]);
         }
         int dir = Integer.parseInt(scanner.nextLine());
         Room next = room.getExit(dir);
-        if (next != null) {
+        if (player.getCurrentRoom().getDescription().equals(room4Desc) && dir == 1) {
+            System.out.println("You ran out the backdoor and escaped! YOU WIN!");
+            System.exit(0);
+        } else if (next != null) {
             if (room.isExitLocked(dir)) {
                 Wall door = room.getWalls()[dir];
                 if (door != null && door.hasPuzzle()) {
@@ -184,7 +208,7 @@ public class GameMain {
                 }
             } else {
                 player.setCurrentRoom(next);
-                System.out.println("You move " + directions[dir].toLowerCase());
+                System.out.println("You move " + directions[dir].toLowerCase() + "...");
             }
         } else {
             System.out.println("You can't go that way.");
