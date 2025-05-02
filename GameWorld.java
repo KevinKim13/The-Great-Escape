@@ -23,7 +23,7 @@ public class GameWorld {
     public void initialize() {
 
         // Creating the rooms and adding them to array
-        Room room1 = new Room("You are in a ramshackle jail cell. To the north is a brick wall.\nTo the east is the cell door.");
+        Room room1 = StartingRoom.initRoom();
         Room room2 = new Room("You are in a cell block with many cells and a heavy metal door to your east.");
         Room room3 = new Room("You are in a dim hallway with flickering lights.\nThere is another door with a peculiar looking lock.");
         Room room4 = new Room("You go upstairs and are now in a dingy kitchen.\nThe kidnapper is preoccupied with watching tv and eating.");
@@ -44,20 +44,12 @@ public class GameWorld {
         room3.lockExit(1);
 
         // Creating all items
-        Item key = new Item("Makeshift Key", "Key", 0.1);
+        // Item key = new Item("Makeshift Key", "Key", 0.1);
         Item comboNote = new Item("Note with 4-digit code: 2115", "Key", 0.0);
         Item wordClue = new Item("Paper with 6-letter word: PRISON", "Key", 0.0);
         Item woodBat = new Item("Unreliable Wooden Bat", "Weapon", 0.6);
         Item peanuts = new Item("Bag of Peanuts", "Secret", 1.0);
         Item knife = new Item("Kitchen Knife", "Weapon", 0.8);
-
-        // Creating walls, assigning items and puzzles/locks
-        Wall[] r1Walls = new Wall[4];
-        r1Walls[0] = new Wall("A brick wall with a loose brick.", "You find a key behind the brick.");
-        r1Walls[0].setItem(key);
-        r1Walls[1] = new Wall("A cell door with a rusty keyhole.", "It requires a key.");
-        r1Walls[2] = new Wall("Just a plain brick wall.", "Nothing of interest.");
-        r1Walls[3] = new Wall("A stained mattress with nothing of use.", "Nothing of interest.");
 
         Wall[] r2Walls = new Wall[4];
         r2Walls[0] = new Wall("There's an old rickety wooden chair.", "You could break off a leg to use as an improvised bat.");
@@ -87,7 +79,7 @@ public class GameWorld {
         r4Walls[3] = new Wall("A door to the basement.", "The basement you just escaped from.");
 
         // Setting walls to their rooms
-        room1.setWalls(r1Walls);
+        // room1.setWalls(r1Walls);
         room2.setWalls(r2Walls);
         room3.setWalls(r3Walls);
         room4.setWalls(r4Walls);

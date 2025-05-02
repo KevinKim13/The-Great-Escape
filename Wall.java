@@ -14,7 +14,7 @@ public class Wall {
     // Instance Variables -------------------------------------------
     private String desc;
     private String inspectText;
-    private InputLockPuzzle puzzle;
+    private Puzzle puzzle;
     private Item item;
     private String[] availableActions;
 
@@ -56,7 +56,7 @@ public class Wall {
      * Returns the wall's puzzle.
      * @return the wall's puzzle
      */
-    public InputLockPuzzle getPuzzle() {
+    public Puzzle getPuzzle() {
         return puzzle;
     }
 
@@ -64,7 +64,7 @@ public class Wall {
      * Sets a wall with a puzzle.
      * @param puzzle the wall's puzzle
      */
-    public void setPuzzle(InputLockPuzzle puzzle) {
+    public void setPuzzle(Puzzle puzzle) {
         this.puzzle = puzzle;
     }
 

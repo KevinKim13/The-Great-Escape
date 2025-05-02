@@ -9,12 +9,10 @@
  *          and keeps track of its status with isSolved.
  */
 
-public class InputLockPuzzle {
+public class InputLockPuzzle extends Puzzle {
 
     // Instance Variables -------------------------------------------
-    private String prompt;
     private String solution;
-    private boolean isSolved;
 
 
     // Constructors -------------------------------------------------
@@ -25,19 +23,8 @@ public class InputLockPuzzle {
      * @param solution the correct answer to solve the puzzle
      */
     public InputLockPuzzle(String prompt, String solution) {
-        this.prompt = prompt;
+        super(prompt, false);
         this.solution = solution.toUpperCase();
-        this.isSolved = false;
-    }
-
-
-    // Methods ------------------------------------------------------
-    /**
-     * Returns the puzzle's prompt.
-     * @return the puzzle's prompt
-     */
-    public String getPrompt() {
-        return prompt;
     }
 
     /**
@@ -45,18 +32,11 @@ public class InputLockPuzzle {
      * @param input the player's attempted solution
      * @return whether or not the puzzle was solved
      */
+    @Override
     public boolean attempt(String input) {
         if (input.toUpperCase().equals(solution)) {
-            isSolved = true;
+            this.isSolved = true;
         }
-        return isSolved;
-    }
-
-    /**
-     * Returns whether or not the puzzle is solved.
-     * @return isSolved
-     */
-    public boolean isSolved() {
         return isSolved;
     }
 }

@@ -11,7 +11,8 @@
 public abstract class Puzzle {
 
     // Instance Variables -------------------------------------------
-    private String prompt;
+    protected String prompt;
+    protected boolean isSolved;
 
 
     // Constructors -------------------------------------------------
@@ -19,8 +20,9 @@ public abstract class Puzzle {
      * Initializes a puzzle with a prompt.
      * @param prompt the puzzle's prompt
      */
-    public Puzzle(String prompt) {
+    public Puzzle(String prompt, boolean isSolved) {
         this.prompt = prompt;
+        this.isSolved = isSolved;
     }
 
 
@@ -39,4 +41,12 @@ public abstract class Puzzle {
      * @return whether or not the puzzle was solved
      */
     public abstract boolean attempt(String input);
+
+    /**
+     * Checks if the puzzle was already solved or not.
+     * @return whether puzzle is already solved.
+     */
+    public boolean isSolved() {
+        return isSolved;
+    }
 }
