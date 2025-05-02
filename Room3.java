@@ -34,8 +34,7 @@ public class Room3 {
      * @param inventory The Players inventry should be passed to check for treats.
      * @return True to move to room 3 or false to go back to room 2.
      */
-    public static boolean enterRoom(List<Item> inventory) {
-        Scanner sc = new Scanner(System.in);
+    public static boolean enterRoom(List<Item> inventory, Scanner sc) {
         System.out.println(
                 "----------------------------------------------------------------------------------------------------");
         System.out.println("You are in a dim hallway with flickering lights.\nThere is a dog snarling at you.");

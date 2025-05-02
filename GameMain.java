@@ -27,7 +27,7 @@ public class GameMain {
         while (true) {
             Room currentRoom = player.getCurrentRoom();
             if (currentRoom == world.getRooms()[2]) {
-                if (!Room3.enterRoom(player.getInventory())) {
+                if (!Room3.enterRoom(player.getInventory(), scanner)) {
                     player.setCurrentRoom(world.getRooms()[1]);
                     currentRoom = player.getCurrentRoom();
                 }
