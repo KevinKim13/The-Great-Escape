@@ -15,12 +15,11 @@ public class GameMain {
 
     // Instance Variables -------------------------------------------
     private static final String[] directions = {"North", "East", "South", "West"};
-
+    private static final GameWorld world = new GameWorld();
 
     // Main Method --------------------------------------------------
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        GameWorld world = new GameWorld();
         world.initialize();
         Player player = world.getPlayer();
 
@@ -34,10 +33,12 @@ public class GameMain {
 
             switch (choice) {
                 case "1":
-                    handleWallListing(currentRoom);
+                    handleWallListing(scanner, currentRoom, player);
                     break;
                 case "2":
-                    handleWallInspection(scanner, currentRoom);
+                    //TODO Can get rid of case 1-3
+                    interactWall(scanner, currentRoom, player);
+                    // handleWallInspection(scanner, currentRoom);
                     break;
                 case "3":
                     handleWallInteraction(scanner, currentRoom);
@@ -68,9 +69,9 @@ public class GameMain {
     private static void printMenu() {
         System.out.println("\nWhat would you like to do?");
         System.out.println("1. Look at walls");
-        System.out.println("2. Inspect a wall");
-        System.out.println("3. Interact with a puzzle");
-        System.out.println("4. Pick up an item");
+        System.out.println("2. Interact with wall"); //TODO we can also get rid of this but I think we can keep it.
+        System.out.println("3. Interact with a puzzle"); //TODO if we do our own wall interaction ones properly
+        System.out.println("4. Pick up an item"); //TODO we can get rid of both of these options (kept for now)
         System.out.println("5. Move");
         System.out.println("6. Check inventory");
         System.out.println("7. Quit");
@@ -81,30 +82,89 @@ public class GameMain {
      * Lists available walls in the player's current room.
      * @param room the player's current room
      */
-    private static void handleWallListing(Room room) {
+    private static void handleWallListing(Scanner scanner, Room room, Player player) {
         for (int i = 0; i < 4; i++) {
             Wall wall = room.getWalls()[i];
             if (wall != null) {
                 System.out.println(directions[i] + ": " + wall.getDescription());
             }
         }
+        interactWall(scanner, room, player);
     }
 
-    /**
-     * Gives player more detail about a specific wall.
-     * @param scanner the game's scanner
-     * @param room the player's current room
-     */
-    private static void handleWallInspection(Scanner scanner, Room room) {
-        System.out.println("Which wall? (0-N, 1-E, 2-S, 3-W)");
+    private static void interactWall(Scanner scanner, Room room, Player player) {
+        System.out.println("Which wall would you like to examine further? (0-N, 1-E, 2-S, 3-W)");
+        System.out.print("> ");
         int index = Integer.parseInt(scanner.nextLine());
         Wall wall = room.getWalls()[index];
         if (wall == null) {
             System.out.println("Nothing interesting here.");
-        } else {
-            System.out.println(wall.getInspectText());
+            return;
         }
+        String[] actions = wall.getAvailableActions();
+        if (actions == null || actions.length == 0) {
+            System.out.println("Nothing to do here.");
+            return;
+        }
+        String action = "";
+        if (room == world.getRooms()[0]) {
+            while (!action.equalsIgnoreCase("Go Back")) {
+                for (int i = 0; i < actions.length; i++) {
+                    System.out.println((i + 1) + ". " + actions[i]);
+                }
+                System.out.print("> ");
+                int actionIndex = Integer.parseInt(scanner.nextLine()) - 1;
+                action = actions[actionIndex];
+                StartingRoom.wallInteraction(action, wall, room, scanner, player);
+            }
+            
+        } else {
+            // TODO change this to other room logic.
+            for (int i = 0; i < actions.length; i++) {
+                System.out.println((i + 1) + ". " + actions[i]);
+            }
+            System.out.print("> ");
+            int actionIndex = Integer.parseInt(scanner.nextLine()) - 1;
+            action = actions[actionIndex];
+            if (action.equalsIgnoreCase("inspect")) {
+                System.out.println(wall.getInspectText());
+            } else if (action.equalsIgnoreCase("enter code") && wall.hasPuzzle()) {
+                System.out.println(wall.getPuzzle().getPrompt());
+                System.out.print("> ");
+                String input = scanner.nextLine().trim();
+                if (wall.getPuzzle().attempt(input)) {
+                    System.out.println("Correct! Puzzle solved.");
+                    for (int i = 0; i < 4; i++) {
+                        if (room.getWalls()[i] == wall && room.isExitLocked(i)) {
+                            room.unlockExit(i);
+                            System.out.println("A door has unlocked to the " + directions[i].toLowerCase() + ".");
+                        }
+                    }
+                } else {
+                    System.out.println("Wrong code.");
+                }
+            } else {
+                System.out.println("You can't do that here.");
+            }
+        } 
     }
+
+    // /**
+    //  * Gives player more detail about a specific wall.
+    //  * @param scanner the game's scanner
+    //  * @param room the player's current room
+    //  */
+    // // TODO we can delete this im pretty sure.
+    // private static void handleWallInspection(Scanner scanner, Room room) {
+    //     System.out.println("Which wall? (0-N, 1-E, 2-S, 3-W)");
+    //     int index = Integer.parseInt(scanner.nextLine());
+    //     Wall wall = room.getWalls()[index];
+    //     if (wall == null) {
+    //         System.out.println("Nothing interesting here.");
+    //     } else {
+    //         System.out.println(wall.getInspectText());
+    //     }
+    // }
 
     /**
      * Allows player to choose a wall to interact with. Displays wall info if available.
@@ -181,11 +241,13 @@ public class GameMain {
      * @param room the player's current room
      * @param player the game's player
      */
+    //TODO lets change this to just choose an exit instead of directions.
     private static void handleMovement(Scanner scanner, Room room, Player player) {
         String room4Desc = "You go upstairs and are now in a dingy kitchen.\nThe kidnapper is preoccupied with watching tv and eating.";
         for (int i = 0; i < 4; i++) {
             System.out.println(i + ". Go " + directions[i]);
         }
+        System.out.print("> ");
         int dir = Integer.parseInt(scanner.nextLine());
         Room next = room.getExit(dir);
         if (player.getCurrentRoom().getDescription().equals(room4Desc) && dir == 1) {
