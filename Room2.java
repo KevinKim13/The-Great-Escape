@@ -11,23 +11,23 @@ import java.util.Scanner;
  * 
  *          Purpose: Initializes room 2
  */
+
 public static Room initRoom() {
         Room room2 = new Room("You escape your cell and enter the cell block. right in front of you is a number of cells, some open and some locked.\nTo the east is the cell block exit. You hear an animal snoring on the other side.\nOn the south wall is even more cells, maybe more clues are in there");
         Item dogTreats = new Item("Box of dog treats", "Treats", 0.1);
         Wall[] r2Walls = new Wall[4];
-        r2Walls[0] = new Wall("It's a bunch of cells.");
-        r2Walls[0].setItem(key);
-        r2Walls[0].setPuzzle(new NumPuzzle("Needs a thin sturdy object.", spoon));
-        r2Walls[1] = new Wall("It's a cell door with a rusty keyhole.", "It requires a three-prong key.");
-        r2Walls[1].setPuzzle(new NumPuzzle("Needs a three-prong key.", key));
-        r2Walls[2] = new Wall("It's a wall with a mattress laying on the ground next to a plastic tray and rusty metal spoon.", "You examine the spoon and although it isn't useful as a digging tool because of the hole in the center, the handle is still sturdy.");
+        r2Walls[1] = new Wall("It's a heavy metal door with a keypad lock.", "It requires a 4-digit code.");
+        r2Walls[1].setPuzzle(new InputLockPuzzle("Enter 4-digit code:", "2115"));
+        r2Walls[1].setAvailableActions(new String[] { "inspect", "enter code" });
+        r2Walls[2] = new Wall("It's another locked cell with a scrap of paper just in reach between the bars.", "The cell contains a note.");
+        r2Walls[2].setItem(comboNote);
         String[] actionSet1 = {"Inspect", "Try Puzzle", "Go Back"};
         r2Walls[0].setAvailableActions(actionSet1);
         r2Walls[1].setAvailableActions(actionSet1);
         String[] actionSet2 = {"Inspect", "Take Item", "Go Back"};
         r2Walls[2].setAvailableActions(actionSet2);
         room2.setWalls(r2Walls);
-        return room1;
+        return room2;
     }
     
 
