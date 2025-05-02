@@ -1,67 +1,63 @@
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 /**
  * Class: RoomFinalBossBattle.java
- * @author [Your Name]
- * @version 1.0
+ * Author: [Your Name]
+ * Version: 1.0
  * Course: CSE 201 Spring 2025
- * Written: [Insert Date]
  * 
  * Purpose: Manages the final boss encounter in the game, combining Room setup and combat logic.
  */
 public class RoomFinalBossBattle extends Room {
 
-    private Player player;
+    public Player player;
 
-    /**
-     * Constructor for RoomFinalBossBattle. Calls the super constructor of Room.
-     * @param player the player object
-     * @param description the description of the final room
-     */
     public RoomFinalBossBattle(Player player, String description) {
-        // Call the Room constructor with the description argument
         super(description);
         this.player = player;
     }
-
-    /**
-     * Builds the final room and sets up the boss battle.
-     * @param player the player object
-     * @return the Room representing the final scene with boss
-     */
-    public static Room buildRoom(Player player) {
-        RoomFinalBossBattle room4 = new RoomFinalBossBattle(player, "You go upstairs and are now in a dingy kitchen.\n"
-                + "The kidnapper is preoccupied with watching TV and eating.");
-
-        // Walls and items setup
+    public static Wall[] buildRoom(Player player) {
+        // Create a new instance of RoomFinalBossBattle (which is a type of Room)
+        RoomFinalBossBattle room4 = new RoomFinalBossBattle(player,
+            "You go upstairs and are now in a dingy kitchen.\n" +
+            "The kidnapper is preoccupied with watching TV and eating.");
+    
+        // Setup walls and items for the room
         Wall[] r4Walls = new Wall[4];
         Item knife = new Item("Kitchen Knife", "Weapon", 0.8);
-
+    
         r4Walls[0] = new Wall("The passageway to the living room where the kidnapper sits.",
                               "It might be possible to take him down.");
+    
         r4Walls[1] = new Wall("The main area of the kitchen with a fridge, oven, and sink.",
                               "You spot a knife in the kitchen sink.");
         r4Walls[1].setItem(knife);
+    
         r4Walls[2] = new Wall("The backdoor of the kidnapper's house",
                               "The only feasible escape route in sight.");
+        r4Walls[2].setAvailableActions(new String[] { "Fight", "Leave" });  // <-- This triggers the fight
+    
         r4Walls[3] = new Wall("A door to the basement.",
                               "The basement you just escaped from.");
-
-        room4.setWalls(r4Walls);
-
-        // Lock the exit to the backdoor (escape route)
-        room4.lockExit(2);  // Lock the backdoor exit (3rd direction, south)
-
-        return room4;
+    
+        // Lock the backdoor exit (index 2 for the backdoor wall)
+        room4.lockExit(2);
+    
+        // Return the walls array to be used by the room
+        return r4Walls;
     }
+    
 
     /**
-     * Starts the final boss battle, where the player confronts the kidnapper.
-     * @param inventory the player's inventory
-     * @param player the player object
-     * @return true if the player defeats the kidnapper, false otherwise
+     * Triggers the boss fight when the player selects "Fight" on the backdoor wall.
+     * @return true if the player defeats the kidnapper
      */
+    public boolean triggerFightFromWall() {
+        return startBossBattle(player.getInventory(), player);
+    }
+
     public static boolean startBossBattle(List<Item> inventory, Player player) {
         Scanner sc = new Scanner(System.in);
 
@@ -70,7 +66,6 @@ public class RoomFinalBossBattle extends Room {
         System.out.println("The kidnapper looks up at you, a malicious grin appearing on his face.");
         System.out.println("\nKidnapper: 'So, you found your way here. But this is the end of the line.'");
 
-        // Battle loop
         while (true) {
             System.out.println("\nWhat do you do?");
             System.out.println("1. Try to talk him down");
@@ -91,10 +86,6 @@ public class RoomFinalBossBattle extends Room {
         }
     }
 
-    /**
-     * Try to reason with the kidnapper (will fail).
-     * @return false (the kidnapper doesn't listen)
-     */
     private static boolean tryTalkHimDown() {
         System.out.println("\nYou try to talk to the kidnapper, but he isn't interested.");
         System.out.println("Kidnapper: 'I have nothing to say to you.'");
@@ -102,12 +93,6 @@ public class RoomFinalBossBattle extends Room {
         return false;
     }
 
-    /**
-     * Use an item from the player's inventory.
-     * @param inventory the player's inventory
-     * @param player the player object
-     * @return true if the player defeats the kidnapper using an item, false otherwise
-     */
     private static boolean useItem(List<Item> inventory, Player player) {
         Scanner sc = new Scanner(System.in);
 
@@ -153,10 +138,6 @@ public class RoomFinalBossBattle extends Room {
         return false;
     }
 
-    /**
-     * Directly attack the kidnapper (will fail).
-     * @return false
-     */
     private static boolean attackBoss() {
         System.out.println("\nYou charge at him, fists flying.");
         System.out.println("The kidnapper fights back fiercely. You struggle, but he overpowers you.");

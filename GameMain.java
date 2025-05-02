@@ -23,7 +23,7 @@ public class GameMain {
         Scanner scanner = new Scanner(System.in);
         world.initialize();
         Player player = world.getPlayer();
-        Room room4 = world.getRooms()[3];  // Assuming room4 is at index 3
+        Room room4 = world.getRooms()[3];
         player.setCurrentRoom(room4);
         while (true) {
             Room currentRoom = player.getCurrentRoom();
@@ -181,6 +181,7 @@ public class GameMain {
             System.out.println("Nothing interesting here.");
             return;
         }
+
         String[] actions = wall.getAvailableActions();
         if (actions == null || actions.length == 0) {
             System.out.println("Nothing to do here.");
@@ -208,7 +209,17 @@ public class GameMain {
             } else {
                 System.out.println("Wrong code.");
             }
-        } else {
+        } else if (action.trim().equalsIgnoreCase("Fight")) {
+            boolean won = ((RoomFinalBossBattle) room).triggerFightFromWall();
+            if (won) {
+                System.out.println("You won the battle and escaped!");
+                room.unlockExit(2); // Unlock backdoor
+            } else {
+                System.out.println("You lost the fight.");
+            }
+        } 
+            else {
+            System.out.println(actions[1]);
             System.out.println("You can't do that here.");
         }
     }
@@ -245,17 +256,13 @@ public class GameMain {
      */
     //TODO lets change this to just choose an exit instead of directions.
     private static void handleMovement(Scanner scanner, Room room, Player player) {
-        String room4Desc = "You go upstairs and are now in a dingy kitchen.\nThe kidnapper is preoccupied with watching tv and eating.";
         for (int i = 0; i < 4; i++) {
             System.out.println(i + ". Go " + directions[i]);
         }
         System.out.print("> ");
         int dir = Integer.parseInt(scanner.nextLine());
         Room next = room.getExit(dir);
-        if (player.getCurrentRoom().getDescription().equals(room4Desc) && dir == 1) {
-            System.out.println("You ran out the backdoor and escaped! YOU WIN!");
-            System.exit(0);
-        } else if (next != null) {
+        if (next != null) {
             if (room.isExitLocked(dir)) {
                 Wall door = room.getWalls()[dir];
                 if (door != null && door.hasPuzzle()) {
