@@ -1,3 +1,5 @@
+import java.util.*;
+
 /**
  * Class: GameWorld.java
  * @author Shane Paton, Will Krajcirik
@@ -5,16 +7,13 @@
  * Course: CSE 201 Spring 2025
  * Written: April 28, 2025
  * 
- * Purpose: Initializes all the objects to be used in the game.
+ * Purpose: Initializes all of the game's objects.
  */
-import java.util.*;
-
 public class GameWorld {
 
     // Instance Variables -------------------------------------------
     private Player player;
     private Room[] rooms;
-
 
     // Methods ------------------------------------------------------
     /**
@@ -22,11 +21,11 @@ public class GameWorld {
      */
     public void initialize() {
 
-        // Creating the rooms and adding them to array
+        // Creating the rooms and adding them to the array
         Room room1 = StartingRoom.initRoom();
         Room room2 = new Room("You are in a cell block with many cells and a heavy metal door to your east.");
         Room room3 = new Room("You are in a dim hallway with flickering lights.\nThere is another door with a peculiar looking lock.");
-        Room room4 = new Room("You go upstairs and are now in a dingy kitchen.\nThe kidnapper is preoccupied with watching tv and eating.");
+        RoomFinalBossBattle room4 = new RoomFinalBossBattle(player, "You go upstairs and are now in a dingy kitchen.\nThe kidnapper is preoccupied with watching TV and eating.");
 
         rooms = new Room[] { room1, room2, room3, room4 };
 
@@ -39,18 +38,18 @@ public class GameWorld {
         room4.setExit(3, room3); // West
 
         // Locking all of the exits
-        room1.lockExit(1);
-        room2.lockExit(1);
-        room3.lockExit(1);
+        room1.lockExit(1); // Lock east exit of room1
+        room2.lockExit(1); // Lock east exit of room2
+        room3.lockExit(1); // Lock east exit of room3
 
         // Creating all items
-        // Item key = new Item("Makeshift Key", "Key", 0.1);
         Item comboNote = new Item("Note with 4-digit code: 2115", "Key", 0.0);
         Item wordClue = new Item("Paper with 6-letter word: PRISON", "Key", 0.0);
         Item woodBat = new Item("Unreliable Wooden Bat", "Weapon", 0.6);
         Item peanuts = new Item("Bag of Peanuts", "Secret", 1.0);
         Item knife = new Item("Kitchen Knife", "Weapon", 0.8);
 
+        // Walls and Items Setup for Room 2
         Wall[] r2Walls = new Wall[4];
         r2Walls[0] = new Wall("There's an old rickety wooden chair.", "You could break off a leg to use as an improvised bat.");
         r2Walls[0].setItem(woodBat);
@@ -61,6 +60,7 @@ public class GameWorld {
         r2Walls[2].setItem(comboNote);
         r2Walls[3] = new Wall("An unlocked door to a cell.", "The cell you just escaped from.");
 
+        // Walls and Items Setup for Room 3
         Wall[] r3Walls = new Wall[4];
         r3Walls[0] = new Wall("A plain wall that houses an antique table with drawers.", "There is a note inside one of the drawers.");
         r3Walls[0].setItem(wordClue);
@@ -71,6 +71,7 @@ public class GameWorld {
         r3Walls[2].setItem(peanuts);
         r3Walls[3] = new Wall("A door to a cell block.", "The cell block you just came from.");
 
+        // Walls and Items Setup for Room 4
         Wall[] r4Walls = new Wall[4];
         r4Walls[0] = new Wall("The passageway to the living room where the kidnapper sits.", "It might be possible to take him down.");
         r4Walls[1] = new Wall("The main area of the kitchen with a fridge, oven, and sink.", "You spot a knife in the kitchen sink.");
@@ -79,7 +80,6 @@ public class GameWorld {
         r4Walls[3] = new Wall("A door to the basement.", "The basement you just escaped from.");
 
         // Setting walls to their rooms
-        // room1.setWalls(r1Walls);
         room2.setWalls(r2Walls);
         room3.setWalls(r3Walls);
         room4.setWalls(r4Walls);

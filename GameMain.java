@@ -16,13 +16,15 @@ public class GameMain {
     // Instance Variables -------------------------------------------
     private static final String[] directions = {"North", "East", "South", "West"};
     private static final GameWorld world = new GameWorld();
+    
 
     // Main Method --------------------------------------------------
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         world.initialize();
         Player player = world.getPlayer();
-
+        Room room4 = world.getRooms()[3];  // Assuming room4 is at index 3
+        player.setCurrentRoom(room4);
         while (true) {
             Room currentRoom = player.getCurrentRoom();
             System.out.println("----------------------------------------------------------------------------------------------------");
