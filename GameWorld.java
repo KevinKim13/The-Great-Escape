@@ -51,12 +51,6 @@ public class GameWorld {
         Item peanuts = new Item("Bag of Peanuts", "Secret", 1.0);
         Item knife = new Item("Kitchen Knife", "Weapon", 0.8);
 
-        // Assigning items to their walls
-        // Wall[] r1Walls = new Wall[4];
-        // r1Walls[0] = new Wall("It's a brick wall with a loose brick.", "You find a key behind the brick.");
-        // r1Walls[0].setItem(key);
-        // r1Walls[1] = new Wall("It's a cell door with a rusty keyhole.", "It requires a key.");
-
         Wall[] r2Walls = new Wall[4];
         r2Walls[0] = new Wall("There's an old rickety wooden chair.", "You could break off a leg to use as an improvised bat.");
         r2Walls[0].setItem(woodBat);
