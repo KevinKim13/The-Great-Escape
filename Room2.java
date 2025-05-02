@@ -11,70 +11,103 @@ import java.util.Scanner;
  * 
  *          Purpose: Initializes room 2
  */
-public class Room2 {
+public static Room initRoom() {
+        Room room2 = new Room("You escape your cell and enter the cell block. right in front of you is a number of cells, some open and some locked.\nTo the east is the cell block exit. You hear an animal snoring on the other side.\nOn the south wall is even more cells, maybe more clues are in there");
+        Item dogTreats = new Item("Box of dog treats", "Treats", 0.1);
+        Wall[] r2Walls = new Wall[4];
+        r2Walls[0] = new Wall("It's a bunch of cells.");
+        r2Walls[0].setItem(key);
+        r2Walls[0].setPuzzle(new NumPuzzle("Needs a thin sturdy object.", spoon));
+        r2Walls[1] = new Wall("It's a cell door with a rusty keyhole.", "It requires a three-prong key.");
+        r2Walls[1].setPuzzle(new NumPuzzle("Needs a three-prong key.", key));
+        r2Walls[2] = new Wall("It's a wall with a mattress laying on the ground next to a plastic tray and rusty metal spoon.", "You examine the spoon and although it isn't useful as a digging tool because of the hole in the center, the handle is still sturdy.");
+        String[] actionSet1 = {"Inspect", "Try Puzzle", "Go Back"};
+        r2Walls[0].setAvailableActions(actionSet1);
+        r2Walls[1].setAvailableActions(actionSet1);
+        String[] actionSet2 = {"Inspect", "Take Item", "Go Back"};
+        r2Walls[2].setAvailableActions(actionSet2);
+        room2.setWalls(r2Walls);
+        return room1;
+    }
+    
 
-    public static Room initRoom() {
-        Room room2 = new Room(
-                "There is another door with a peculiar looking lock.");
-        Item wordClue = new Item("Paper in cell with number code to break lock: 2115", "Key", 0.0);
+    public static void wallInteraction(String action, Wall wall, Room room, Scanner scanner, Player player) {
+        if (action.equalsIgnoreCase("inspect")) {
+            System.out.println(wall.getInspectText());
+        } else if (action.equalsIgnoreCase("Try Puzzle")) {
+            tryLock(wall, room, scanner, player);
+        } else if (action.equalsIgnoreCase("Take Item")) {
+            takeItem(wall, player);
+        } else if (action.equalsIgnoreCase("Go Back")) {
+            // Do nothing
+        } else {
+            System.out.println("You can't do that here.");
+        }
+    }
 
-        Wall[] walls = new Wall[4];
-        walls[0] = new Wall("A plain wall that houses an antique table with drawers.",
-                "There is a note inside one of the drawers.");
-        walls[0].setItem(wordClue);
-        walls[1] = new Wall("It's a door with a rotating letter lock.", "It requires a 6-letter word.");
-        walls[1].setPuzzle(new InputLockPuzzle("Enter 6-letter word:", "PRISON"));
-        walls[1].setAvailableActions(new String[] { "inspect", "enter code" });
+    private static void tryLock(Wall wall, Room room, Scanner scanner, Player player) {
+        Item item = null;
+        if (!player.getInventory().isEmpty() && !wall.getPuzzle().isSolved()) {
+            System.out.println(wall.getPuzzle().getPrompt());
+            System.out.println("You check your inventory for useful items to try.");
+            printInventory(player);
+            System.out.print("> ");
+            int input = Integer.parseInt(scanner.nextLine());
+            item = player.getInventory().get(input - 1);
+        } else { 
+            if (wall.getPuzzle().isSolved()) {
+                System.out.println("Puzzle already complete.");
+            } else {
+                System.out.println("You don't have anything useful. Maybe search around the room?");
+            }
+            return;               
+        }
+        if (((ItemLockPuzzle)wall.getPuzzle()).attempt(item)) {
+            System.out.println("Correct! Puzzle solved.");
+            for (int i = 0; i < 4; i++) {
+                if (room.getWalls()[i] == wall && room.isExitLocked(i)) {
+                    room.unlockExit(i);
+                    System.out.println("Door unlocked.");
+                }
+            }
+            if (wall.getItem() != null) {
+                player.addItem(wall.getItem());
+                System.out.println("You grab " + wall.getItem().getName());
+            }
+        } else {
+            System.out.println("Wrong item.");
+        }
+    }
 
-        return room3;
-
+     /**
+     * Prints the player's inventory to the terminal.
+     * @param player the game's player
+     */
+    private static void printInventory(Player player) {
+        ArrayList<Item> inv = (ArrayList<Item>) player.getInventory();
+        if (inv.isEmpty()) {
+            System.out.println("Your inventory is empty.");
+        } else {
+            System.out.println("Inventory:");
+            for (int i = 0; i < inv.size(); i++) {
+                Item item = inv.get(i);
+                System.out.println((i + 1) + ". " + item.getName() + " (" + item.getType() + ")");
+            }
+        }
     }
 
     /**
-     * This will be called before entering the room. It handles the miniboss logic,
-     * returning true if the boss is defeated and the player should advance to room
-     * 3, and false if the miniboss is not defeated and the player should be sent
-     * back to room 2 to continue searching.
-     * 
-     * @param inventory The Players inventry should be passed to check for treats.
-     * @return True to move to room 3 or false to go back to room 2.
+     * Helper method to handle take item action.
+     * @param wall the wall with the item
+     * @param player the player to add the item to
      */
-    public static boolean enterRoom(List<Item> inventory) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println(
-                "----------------------------------------------------------------------------------------------------");
-        System.out.println("You enter the cell block outside the cell you were locked in.\n.");
-        System.out.println("\nWhat would you like to do?");
-        System.out.println("1. Try to tame the dog with what you have found");
-        System.out.println("2. Go back and look for something to tame the dog");
-        String choice = sc.nextLine().trim();
-
-        switch (choice) {
-            case "1":
-                return fightBoss(inventory);
-            case "2":
-
-                return false;
-            default: {
-                System.out.println("Invalid option. Please enter 1 or 2");
-            }
+    private static void takeItem(Wall wall, Player player) {
+        if (wall.getItem() != null) {
+            player.getInventory().add(wall.getItem());
+            System.out.println("Picked up: " + wall.getItem().getName());
+            wall.setItem(null);
+        } else {
+            System.out.println("Item has already been taken.");
         }
-        return false;
-    }
-
-    // somone needs to add dog treats
-    private static boolean fightBoss(List<Item> inventory) {
-
-        for (int i = 0; i < inventory.size(); i++) {
-            if (inventory.get(i).getName().equals("Dog Treats")) {
-                System.out.println(
-                        "You pull out your dog treats and all of the sudden the dog looks friendly."
-                                + "After some treats and petting the dog curls up and rests in the corner.");
-                return true;
-            }
-        }
-        System.out.println(
-                "You check you pockets but there is nothing to befriend the dog with so you head back to room 2.");
-        return false;
     }
 }
