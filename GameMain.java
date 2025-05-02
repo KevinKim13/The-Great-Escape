@@ -1,3 +1,4 @@
+
 /**
  * Class: GameMain.java
  * @author Landen Burns, Kevin Kim, Shane Paton, Joseph Edwards, Will Krajcirik
@@ -14,7 +15,7 @@ import java.util.Scanner;
 public class GameMain {
 
     // Instance Variables -------------------------------------------
-    private static final String[] directions = {"North", "East", "South", "West"};
+    private static final String[] directions = { "North", "East", "South", "West" };
     private static final GameWorld world = new GameWorld();
 
     // Main Method --------------------------------------------------
@@ -25,7 +26,14 @@ public class GameMain {
 
         while (true) {
             Room currentRoom = player.getCurrentRoom();
-            System.out.println("----------------------------------------------------------------------------------------------------");
+            if (currentRoom == world.getRooms()[2]) {
+                if (!Room3.enterRoom(player.getInventory())) {
+                    player.setCurrentRoom(world.getRooms()[1]);
+                    currentRoom = player.getCurrentRoom();
+                }
+            }
+            System.out.println(
+                    "----------------------------------------------------------------------------------------------------");
             System.out.println("\nLocation: " + currentRoom.getDescription());
 
             printMenu();
@@ -36,7 +44,7 @@ public class GameMain {
                     handleWallListing(scanner, currentRoom, player);
                     break;
                 case "2":
-                    //TODO Can get rid of case 1-3
+                    // TODO Can get rid of case 1-3
                     interactWall(scanner, currentRoom, player);
                     // handleWallInspection(scanner, currentRoom);
                     break;
@@ -61,7 +69,6 @@ public class GameMain {
         }
     }
 
-
     // Methods ------------------------------------------------------
     /**
      * Prints the menu of the game and the player input line.
@@ -69,9 +76,9 @@ public class GameMain {
     private static void printMenu() {
         System.out.println("\nWhat would you like to do?");
         System.out.println("1. Look at walls");
-        System.out.println("2. Interact with wall"); //TODO we can also get rid of this but I think we can keep it.
-        System.out.println("3. Interact with a puzzle"); //TODO if we do our own wall interaction ones properly
-        System.out.println("4. Pick up an item"); //TODO we can get rid of both of these options (kept for now)
+        System.out.println("2. Interact with wall"); // TODO we can also get rid of this but I think we can keep it.
+        System.out.println("3. Interact with a puzzle"); // TODO if we do our own wall interaction ones properly
+        System.out.println("4. Pick up an item"); // TODO we can get rid of both of these options (kept for now)
         System.out.println("5. Move");
         System.out.println("6. Check inventory");
         System.out.println("7. Quit");
@@ -80,6 +87,7 @@ public class GameMain {
 
     /**
      * Lists available walls in the player's current room.
+     * 
      * @param room the player's current room
      */
     private static void handleWallListing(Scanner scanner, Room room, Player player) {
@@ -117,7 +125,7 @@ public class GameMain {
                 action = actions[actionIndex];
                 StartingRoom.wallInteraction(action, wall, room, scanner, player);
             }
-            
+
         } else {
             // TODO change this to other room logic.
             for (int i = 0; i < actions.length; i++) {
@@ -146,30 +154,32 @@ public class GameMain {
             } else {
                 System.out.println("You can't do that here.");
             }
-        } 
+        }
     }
 
     // /**
-    //  * Gives player more detail about a specific wall.
-    //  * @param scanner the game's scanner
-    //  * @param room the player's current room
-    //  */
+    // * Gives player more detail about a specific wall.
+    // * @param scanner the game's scanner
+    // * @param room the player's current room
+    // */
     // // TODO we can delete this im pretty sure.
     // private static void handleWallInspection(Scanner scanner, Room room) {
-    //     System.out.println("Which wall? (0-N, 1-E, 2-S, 3-W)");
-    //     int index = Integer.parseInt(scanner.nextLine());
-    //     Wall wall = room.getWalls()[index];
-    //     if (wall == null) {
-    //         System.out.println("Nothing interesting here.");
-    //     } else {
-    //         System.out.println(wall.getInspectText());
-    //     }
+    // System.out.println("Which wall? (0-N, 1-E, 2-S, 3-W)");
+    // int index = Integer.parseInt(scanner.nextLine());
+    // Wall wall = room.getWalls()[index];
+    // if (wall == null) {
+    // System.out.println("Nothing interesting here.");
+    // } else {
+    // System.out.println(wall.getInspectText());
+    // }
     // }
 
     /**
-     * Allows player to choose a wall to interact with. Displays wall info if available.
+     * Allows player to choose a wall to interact with. Displays wall info if
+     * available.
+     * 
      * @param scanner the game's scanner
-     * @param room the player's current room
+     * @param room    the player's current room
      */
     private static void handleWallInteraction(Scanner scanner, Room room) {
         System.out.println("Which wall? (0-N, 1-E, 2-S, 3-W)");
@@ -213,9 +223,10 @@ public class GameMain {
 
     /**
      * Gives player the option to take item. Adds item to inventory if taken.
+     * 
      * @param scanner the game's scanner
-     * @param room the player's current room
-     * @param player the game's player
+     * @param room    the player's current room
+     * @param player  the game's player
      */
     private static void handleItemPickup(Scanner scanner, Room room, Player player) {
         for (int i = 0; i < 4; i++) {
@@ -236,12 +247,14 @@ public class GameMain {
     }
 
     /**
-     * Lists the available directions to go and attempts to move player to inputted direction.
+     * Lists the available directions to go and attempts to move player to inputted
+     * direction.
+     * 
      * @param scanner the game's scanner
-     * @param room the player's current room
-     * @param player the game's player
+     * @param room    the player's current room
+     * @param player  the game's player
      */
-    //TODO lets change this to just choose an exit instead of directions.
+    // TODO lets change this to just choose an exit instead of directions.
     private static void handleMovement(Scanner scanner, Room room, Player player) {
         String room4Desc = "You go upstairs and are now in a dingy kitchen.\nThe kidnapper is preoccupied with watching tv and eating.";
         for (int i = 0; i < 4; i++) {
@@ -276,11 +289,13 @@ public class GameMain {
             System.out.println("You can't go that way.");
         }
 
-        // ADD FINISH PATH + BOSS - IF THE PLAYER TRIES TO MOVE FROM ROOM 4 EAST AFTER BEATING KIDNAPPER, THEN THEY WIN
+        // ADD FINISH PATH + BOSS - IF THE PLAYER TRIES TO MOVE FROM ROOM 4 EAST AFTER
+        // BEATING KIDNAPPER, THEN THEY WIN
     }
 
     /**
      * Prints the player's inventory to the terminal.
+     * 
      * @param player the game's player
      */
     private static void printInventory(Player player) {

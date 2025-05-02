@@ -15,19 +15,14 @@ public class Room3 {
 
     public static Room initRoom() {
         Room room3 = new Room(
-                "There is another door with a peculiar looking lock.");
-        Item wordClue = new Item("Paper with 6-letter word: PRISON", "Key", 0.0);
-
+                "You glance up and see a staircase heading up. Above you hear footsteps and a TV turn on");
         Wall[] walls = new Wall[4];
-        walls[0] = new Wall("A plain wall that houses an antique table with drawers.",
-                "There is a note inside one of the drawers.");
-        walls[0].setItem(wordClue);
-        walls[1] = new Wall("It's a door with a rotating letter lock.", "It requires a 6-letter word.");
-        walls[1].setPuzzle(new InputLockPuzzle("Enter 6-letter word:", "PRISON"));
-        walls[1].setAvailableActions(new String[] { "inspect", "enter code" });
-
+        walls[0] = new Wall("There is a wall full of pictures of people in jail cells...",
+                "There is nothing behind the pictures");
+        walls[0].setAvailableActions(new String[] { "inspect" });
+        walls[1] = new Wall("It's a door with a rotating letter lock.", "Nothing to do here.");
+        walls[1].setAvailableActions(new String[] { "inspect" });
         return room3;
-
     }
 
     /**
