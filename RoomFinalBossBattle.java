@@ -131,12 +131,6 @@ public class RoomFinalBossBattle extends Room {
                     return false;
                 }
     
-            } else if (selectedItem.getName().equalsIgnoreCase("Evidence Folder")) {
-                System.out.println("You present the Evidence Folder.");
-                System.out.println("Kidnapper: 'You... weren’t supposed to find that...'");
-                System.out.println("He surrenders, realizing the truth will come out.");
-                return true;
-    
             } else {
                 System.out.println("The " + selectedItem.getName() + " doesn't help you here.");
                 return false;
