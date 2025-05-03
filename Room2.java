@@ -80,39 +80,44 @@ public class Room2 {
         }
     }
 
-    private static void tryLock(Wall wall, Room room, Scanner scanner, Player player) {
-        Item item = null;
-        if (!player.getInventory().isEmpty() && !wall.getPuzzle().isSolved()) {
-            System.out.println(wall.getPuzzle().getPrompt());
-            System.out.println("You check your inventory for useful items to try.");
-            printInventory(player);
-            System.out.print("> ");
-            int input = Integer.parseInt(scanner.nextLine());
-            item = player.getInventory().get(input - 1);
-        } else { 
-            if (wall.getPuzzle().isSolved()) {
-                System.out.println("Puzzle already complete.");
-            } else {
-                System.out.println("You don't have anything useful. Maybe search around the room?");
+     private static void tryLock(Wall wall, Room room, Scanner scanner, Player player) {
+        if (wall.hasPuzzle() && wall.getPuzzle() instanceof InputLockPuzzle) {
+            InputLockPuzzle puzzle = (InputLockPuzzle) wall.getPuzzle();
+            
+            if (puzzle.isSolved()) {
+                System.out.println("This puzzle is already solved.");
+                return;
             }
-            return;               
-        }
-        if (((ItemLockPuzzle)wall.getPuzzle()).attempt(item)) {
-            System.out.println("Correct! Puzzle solved.");
-            for (int i = 0; i < 4; i++) {
-                if (room.getWalls()[i] == wall && room.isExitLocked(i)) {
-                    room.unlockExit(i);
-                    System.out.println("Door unlocked.");
+            
+            boolean hasCode = false;
+            for (Item item : player.getInventory()) {
+                if (item.getName().contains("code")) {
+                    hasCode = true;
+                    break;
                 }
             }
-            if (wall.getItem() != null) {
-                player.addItem(wall.getItem());
-                System.out.println("You grab " + wall.getItem().getName());
+            
+            if (hasCode) {
+                System.out.println("You have a note with the code: 2115");
+                System.out.println(puzzle.getPrompt());
+                System.out.print("> ");
+                String input = scanner.nextLine().trim();
+                
+                if (puzzle.attempt(input)) {
+                    System.out.println("Correct! The keypad beeps and the door unlocks.");
+                    for (int i = 0; i < 4; i++) {
+                        if (room.getWalls()[i] == wall && room.isExitLocked(i)) {
+                            room.unlockExit(i);
+                            System.out.println("The east door is now unlocked. You hear snoring from the other side.");
+                        }
+                    }
+                } else {
+                    System.out.println("Wrong code. The keypad flashes red.");
+                }
+            } else {
+                System.out.println("You don't know the code. Maybe look around for clues?");
             }
-        } else {
-            System.out.println("Wrong item.");
-        }
-    }
+        } 
 
      /**
      * Prints the player's inventory to the terminal.
