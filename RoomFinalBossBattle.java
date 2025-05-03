@@ -95,47 +95,57 @@ public class RoomFinalBossBattle extends Room {
 
     private static boolean useItem(List<Item> inventory, Player player) {
         Scanner sc = new Scanner(System.in);
-
+    
         if (inventory.isEmpty()) {
             System.out.println("You have nothing in your inventory.");
             return false;
         }
-
-        System.out.println("\nWhich item do you want to use? (Type the item name exactly)");
-        for (Item item : inventory) {
-            System.out.println("- " + item.getName() + " (Type: " + item.getType() + ")");
+    
+        System.out.println("\nWhich item do you want to use? Enter the number:");
+    
+        for (int i = 0; i < inventory.size(); i++) {
+            Item item = inventory.get(i);
+            System.out.printf("%d. %s (Type: %s)%n", i + 1, item.getName(), item.getType());
         }
-
-        String itemName = sc.nextLine().trim();
-        for (Item item : inventory) {
-            if (item.getName().equalsIgnoreCase(itemName)) {
-
-                if (item.getType().equalsIgnoreCase("Weapon")) {
-                    double roll = Math.random(); // 0.0 to 1.0
-                    System.out.printf("You use the %s. Rolling for success... (Need ≤ %.2f)%n", item.getName(), item.getChance());
-                    if (roll <= item.getChance()) {
-                        System.out.println("Success! You defeat the kidnapper with the " + item.getName() + ".");
-                        return true;
-                    } else {
-                        System.out.println("You tried to use the " + item.getName() + ", but it failed. The kidnapper overpowers you.");
-                        return false;
-                    }
-
-                } else if (item.getName().equalsIgnoreCase("Evidence Folder")) {
-                    System.out.println("You present the Evidence Folder.");
-                    System.out.println("Kidnapper: 'You... weren’t supposed to find that...'");
-                    System.out.println("He surrenders, realizing the truth will come out.");
+    
+        int choice = -1;
+        try {
+            System.out.print("Your choice: ");
+            choice = Integer.parseInt(sc.nextLine().trim()) - 1;
+    
+            if (choice < 0 || choice >= inventory.size()) {
+                System.out.println("Invalid number.");
+                return false;
+            }
+    
+            Item selectedItem = inventory.get(choice);
+    
+            if (selectedItem.getType().equalsIgnoreCase("Weapon")) {
+                double roll = Math.random();
+                System.out.printf("You use the %s. Rolling for success... (Need ≤ %.2f)%n", selectedItem.getName(), selectedItem.getChance());
+                if (roll <= selectedItem.getChance()) {
+                    System.out.println("Success! You defeat the kidnapper with the " + selectedItem.getName() + ".");
                     return true;
-
                 } else {
-                    System.out.println("The " + item.getName() + " doesn't help you here.");
+                    System.out.println("You tried to use the " + selectedItem.getName() + ", but it failed. The kidnapper overpowers you.");
                     return false;
                 }
+    
+            } else if (selectedItem.getName().equalsIgnoreCase("Evidence Folder")) {
+                System.out.println("You present the Evidence Folder.");
+                System.out.println("Kidnapper: 'You... weren’t supposed to find that...'");
+                System.out.println("He surrenders, realizing the truth will come out.");
+                return true;
+    
+            } else {
+                System.out.println("The " + selectedItem.getName() + " doesn't help you here.");
+                return false;
             }
+    
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            return false;
         }
-
-        System.out.println("You don't have that item.");
-        return false;
     }
 
     private static boolean attackBoss() {

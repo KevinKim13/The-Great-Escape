@@ -108,8 +108,11 @@ public class GameMain {
             System.out.println("Nothing to do here.");
             return;
         }
+    
         String action = "";
+    
         if (room == world.getRooms()[0]) {
+            // Starting room logic
             while (!action.equalsIgnoreCase("Go Back")) {
                 for (int i = 0; i < actions.length; i++) {
                     System.out.println((i + 1) + ". " + actions[i]);
@@ -119,17 +122,49 @@ public class GameMain {
                 action = actions[actionIndex];
                 StartingRoom.wallInteraction(action, wall, room, scanner, player);
             }
-            
-        } else {
-            // TODO change this to other room logic.
+    
+        } else if (room instanceof RoomFinalBossBattle) {
+            // Final boss room logic
             for (int i = 0; i < actions.length; i++) {
                 System.out.println((i + 1) + ". " + actions[i]);
             }
             System.out.print("> ");
             int actionIndex = Integer.parseInt(scanner.nextLine()) - 1;
             action = actions[actionIndex];
+    
+            if (action.equalsIgnoreCase("Fight")) {
+                RoomFinalBossBattle bossRoom = (RoomFinalBossBattle) room;
+                boolean won = bossRoom.triggerFightFromWall();
+                if (won) {
+                    room.unlockExit(2); // Unlock the backdoor
+                    System.out.println("The backdoor is now open. You can escape!");
+                } else {
+                    System.out.println("You failed to defeat the kidnapper.");
+                    System.exit(0);
+                }
+    
+            } else if (action.equalsIgnoreCase("Leave")) {
+                System.out.println("You decide to avoid conflict for now.");
+    
+            } else if (action.equalsIgnoreCase("inspect")) {
+                System.out.println(wall.getInspectText());
+    
+            } else {
+                System.out.println("You can't do that here.");
+            }
+    
+        } else {
+            // Default room logic
+            for (int i = 0; i < actions.length; i++) {
+                System.out.println((i + 1) + ". " + actions[i]);
+            }
+            System.out.print("> ");
+            int actionIndex = Integer.parseInt(scanner.nextLine()) - 1;
+            action = actions[actionIndex];
+    
             if (action.equalsIgnoreCase("inspect")) {
                 System.out.println(wall.getInspectText());
+    
             } else if (action.equalsIgnoreCase("enter code") && wall.hasPuzzle()) {
                 System.out.println(wall.getPuzzle().getPrompt());
                 System.out.print("> ");
@@ -145,10 +180,11 @@ public class GameMain {
                 } else {
                     System.out.println("Wrong code.");
                 }
+    
             } else {
                 System.out.println("You can't do that here.");
             }
-        } 
+        }
     }
 
     // /**
