@@ -36,23 +36,16 @@ public class GameMain {
                     handleWallListing(scanner, currentRoom, player);
                     break;
                 case "2":
-                    //TODO Can get rid of case 1-3
                     interactWall(scanner, currentRoom, player);
                     // handleWallInspection(scanner, currentRoom);
                     break;
                 case "3":
-                    handleWallInteraction(scanner, currentRoom);
-                    break;
-                case "4":
-                    handleItemPickup(scanner, currentRoom, player);
-                    break;
-                case "5":
                     handleMovement(scanner, currentRoom, player);
                     break;
-                case "6":
+                case "4":
                     printInventory(player);
                     break;
-                case "7":
+                case "5":
                     System.out.println("Thank you for playing! Goodbye!");
                     return;
                 default:
@@ -70,11 +63,9 @@ public class GameMain {
         System.out.println("\nWhat would you like to do?");
         System.out.println("1. Look at walls");
         System.out.println("2. Interact with wall"); //TODO we can also get rid of this but I think we can keep it.
-        System.out.println("3. Interact with a puzzle"); //TODO if we do our own wall interaction ones properly
-        System.out.println("4. Pick up an item"); //TODO we can get rid of both of these options (kept for now)
-        System.out.println("5. Move");
-        System.out.println("6. Check inventory");
-        System.out.println("7. Quit");
+        System.out.println("3. Move");
+        System.out.println("4. Check inventory");
+        System.out.println("5. Quit");
         System.out.print("> ");
     }
 
@@ -96,6 +87,12 @@ public class GameMain {
         System.out.println("Which wall would you like to examine further? (0-N, 1-E, 2-S, 3-W)");
         System.out.print("> ");
         int index = Integer.parseInt(scanner.nextLine());
+        while (!(index < 4 && index >= 0 )) {
+            System.out.println("Invalid input. Enter a number 0-3");
+            System.out.println("Which wall would you like to examine further? (0-N, 1-E, 2-S, 3-W)");
+            System.out.print("> ");
+            index = Integer.parseInt(scanner.nextLine());
+        }
         Wall wall = room.getWalls()[index];
         if (wall == null) {
             System.out.println("Nothing interesting here.");
@@ -149,92 +146,6 @@ public class GameMain {
         } 
     }
 
-    // /**
-    //  * Gives player more detail about a specific wall.
-    //  * @param scanner the game's scanner
-    //  * @param room the player's current room
-    //  */
-    // // TODO we can delete this im pretty sure.
-    // private static void handleWallInspection(Scanner scanner, Room room) {
-    //     System.out.println("Which wall? (0-N, 1-E, 2-S, 3-W)");
-    //     int index = Integer.parseInt(scanner.nextLine());
-    //     Wall wall = room.getWalls()[index];
-    //     if (wall == null) {
-    //         System.out.println("Nothing interesting here.");
-    //     } else {
-    //         System.out.println(wall.getInspectText());
-    //     }
-    // }
-
-    /**
-     * Allows player to choose a wall to interact with. Displays wall info if available.
-     * @param scanner the game's scanner
-     * @param room the player's current room
-     */
-    private static void handleWallInteraction(Scanner scanner, Room room) {
-        System.out.println("Which wall? (0-N, 1-E, 2-S, 3-W)");
-        int index = Integer.parseInt(scanner.nextLine());
-        Wall wall = room.getWalls()[index];
-        if (wall == null) {
-            System.out.println("Nothing interesting here.");
-            return;
-        }
-        String[] actions = wall.getAvailableActions();
-        if (actions == null || actions.length == 0) {
-            System.out.println("Nothing to do here.");
-            return;
-        }
-        for (int i = 0; i < actions.length; i++) {
-            System.out.println((i + 1) + ". " + actions[i]);
-        }
-        int actionIndex = Integer.parseInt(scanner.nextLine()) - 1;
-        String action = actions[actionIndex];
-        if (action.equalsIgnoreCase("inspect")) {
-            System.out.println(wall.getInspectText());
-        } else if (action.equalsIgnoreCase("enter code") && wall.hasPuzzle()) {
-            System.out.println(wall.getPuzzle().getPrompt());
-            System.out.print("> ");
-            String input = scanner.nextLine().trim();
-            if (wall.getPuzzle().attempt(input)) {
-                System.out.println("Correct! Puzzle solved.");
-                for (int i = 0; i < 4; i++) {
-                    if (room.getWalls()[i] == wall && room.isExitLocked(i)) {
-                        room.unlockExit(i);
-                        System.out.println("A door has unlocked to the " + directions[i].toLowerCase() + ".");
-                    }
-                }
-            } else {
-                System.out.println("Wrong code.");
-            }
-        } else {
-            System.out.println("You can't do that here.");
-        }
-    }
-
-    /**
-     * Gives player the option to take item. Adds item to inventory if taken.
-     * @param scanner the game's scanner
-     * @param room the player's current room
-     * @param player the game's player
-     */
-    private static void handleItemPickup(Scanner scanner, Room room, Player player) {
-        for (int i = 0; i < 4; i++) {
-            Wall w = room.getWalls()[i];
-            if (w != null && w.getItem() != null) {
-                System.out.println(i + ". Take item from " + directions[i] + " wall: " + w.getItem().getName());
-            }
-        }
-        int index = Integer.parseInt(scanner.nextLine());
-        Wall wall = room.getWalls()[index];
-        if (wall != null && wall.getItem() != null) {
-            player.getInventory().add(wall.getItem());
-            System.out.println("Picked up: " + wall.getItem().getName());
-            wall.setItem(null);
-        } else {
-            System.out.println("Nothing picked up.");
-        }
-    }
-
     /**
      * Lists the available directions to go and attempts to move player to inputted direction.
      * @param scanner the game's scanner
@@ -275,8 +186,7 @@ public class GameMain {
         } else {
             System.out.println("You can't go that way.");
         }
-
-        // ADD FINISH PATH + BOSS - IF THE PLAYER TRIES TO MOVE FROM ROOM 4 EAST AFTER BEATING KIDNAPPER, THEN THEY WIN
+        // TODO ADD FINISH PATH + BOSS - IF THE PLAYER TRIES TO MOVE FROM ROOM 4 EAST AFTER BEATING KIDNAPPER, THEN THEY WIN
     }
 
     /**
