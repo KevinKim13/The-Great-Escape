@@ -44,7 +44,10 @@ public class GameMain {
                     handleWallListing(scanner, currentRoom, player);
                     break;
                 case "2":
+<<<<<<< HEAD
                     // TODO Can get rid of case 1-3
+=======
+>>>>>>> origin/main
                     interactWall(scanner, currentRoom, player);
                     // handleWallInspection(scanner, currentRoom);
                     break;
