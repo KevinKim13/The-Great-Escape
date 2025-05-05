@@ -87,7 +87,16 @@ public class StartingRoom {
                     }
                 }
             } catch (Exception e) {
-                //Do Nothing
+                while (input > player.getInventory().size() || input < 1) {
+                    System.out.println("Please choose a number between 1-" + player.getInventory().size() + ".");
+                    printInventory(player);
+                    System.out.print("> ");
+                    try {
+                        input = Integer.parseInt(scanner.nextLine()); 
+                    } catch (Exception d) {
+                    // Do Nothing 
+                    }
+                }
             }
             item = player.getInventory().get(input - 1);
         } else { 

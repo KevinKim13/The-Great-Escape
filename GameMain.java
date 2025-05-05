@@ -136,7 +136,17 @@ public class GameMain {
                 
             }
         } catch (Exception e) {
-            //do Nothing
+            while (!(index < 4 && index >= 0)) {
+                System.out.println("Invalid input. Enter a number 0-3");
+                System.out.println("Which wall would you like to examine further? (0-N, 1-E, 2-S, 3-W)");
+                System.out.print("> ");
+                try {
+                    index = Integer.parseInt(scanner.nextLine()); 
+                } catch (Exception d) {
+                   // Do Nothing 
+                }
+                
+            }
         }
         Wall wall = room.getWalls()[index];
         if (wall == null) {
@@ -182,7 +192,18 @@ public class GameMain {
                     }
                 }
             } catch (Exception e) {
-                //do Nothing
+                while (!(actionIndex < actions.length && actionIndex >= 0 )) {
+                    System.out.println("Invalid input. Enter a number 1-" + actions.length + ".");
+                    for (int i = 0; i < actions.length; i++) {
+                        System.out.println((i + 1) + ". " + actions[i]);
+                    }
+                    System.out.print("> ");
+                    try {
+                        actionIndex = Integer.parseInt(scanner.nextLine()); 
+                    } catch (Exception d) {
+                    // Do Nothing 
+                    }
+                }
             }
             action = actions[actionIndex];
             if (room == world.getRooms()[0]) {
@@ -226,7 +247,18 @@ public class GameMain {
                 }
             }
         } catch (Exception e) {
-            //do Nothing
+            while (dir < 0 || dir > 3) {
+                System.out.println("Invalid direction, choose 0-3.");
+                for (int i = 0; i < 4; i++) {
+                    System.out.println(i + ". Go " + directions[i]);
+                }
+                System.out.print("> ");
+                try {
+                    dir = Integer.parseInt(scanner.nextLine()); 
+                } catch (Exception d) {
+                // Do Nothing 
+                }
+            }
         }
         Room next = room.getExit(dir);
         if (player.getCurrentRoom().getDescription().equals(room4Desc) && dir == 1) {
