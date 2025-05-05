@@ -90,6 +90,12 @@ public class GameMain {
         interactWall(scanner, room, player);
     }
 
+    /**
+     * Handle initial user input to direct wall interactions to correct methods.
+     * @param scanner the scanner taking user input
+     * @param room the current room
+     * @param player the player
+     */
     private static void interactWall(Scanner scanner, Room room, Player player) {
         System.out.println("Which wall would you like to examine further? (0-N, 1-E, 2-S, 3-W)");
         System.out.print("> ");
@@ -129,7 +135,6 @@ public class GameMain {
                 action = actions[actionIndex];
                 StartingRoom.wallInteraction(action, wall, room, scanner, player);
             }
-
         } else {
             // TODO change this to other room logic.
             for (int i = 0; i < actions.length; i++) {
@@ -194,15 +199,6 @@ public class GameMain {
                 Wall door = room.getWalls()[dir];
                 if (door != null && door.hasPuzzle()) {
                     System.out.println("This door's puzzle must be solved.");
-                } else {
-                    boolean hasKey = player.getInventory().stream().anyMatch(i -> i.getType().equals("Key"));
-                    if (hasKey) {
-                        room.unlockExit(dir);
-                        System.out.println("You used a key to unlock the door.");
-                        player.setCurrentRoom(next);
-                    } else {
-                        System.out.println("The door is locked and requires a key.");
-                    }
                 }
             } else {
                 player.setCurrentRoom(next);
@@ -211,8 +207,6 @@ public class GameMain {
         } else {
             System.out.println("You can't go that way.");
         }
-        // TODO ADD FINISH PATH + BOSS - IF THE PLAYER TRIES TO MOVE FROM ROOM 4 EAST
-        // AFTER BEATING KIDNAPPER, THEN THEY WIN
     }
 
     /**

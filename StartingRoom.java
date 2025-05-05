@@ -37,7 +37,14 @@ public class StartingRoom {
         return room1;
     }
     
-
+    /**
+     * Handles wall interactions for room 1.
+     * @param action the string of action type
+     * @param wall the wall being interacted with
+     * @param room the room the player is in
+     * @param scanner the scanner we are using for the game
+     * @param player the player playing the game
+     */
     public static void wallInteraction(String action, Wall wall, Room room, Scanner scanner, Player player) {
         if (action.equalsIgnoreCase("inspect")) {
             System.out.println(wall.getInspectText());
@@ -52,6 +59,13 @@ public class StartingRoom {
         }
     }
 
+    /**
+     * Function that handles puzzle attempt.
+     * @param wall wall puzzle is on
+     * @param room current room
+     * @param scanner scanner to take user input
+     * @param player current player
+     */
     private static void tryLock(Wall wall, Room room, Scanner scanner, Player player) {
         Item item = null;
         if (!player.getInventory().isEmpty() && !wall.getPuzzle().isSolved()) {
@@ -76,19 +90,29 @@ public class StartingRoom {
             return;               
         }
         if (((ItemLockPuzzle)wall.getPuzzle()).attempt(item)) {
-            System.out.println("Correct! Puzzle solved.");
-            for (int i = 0; i < 4; i++) {
-                if (room.getWalls()[i] == wall && room.isExitLocked(i)) {
-                    room.unlockExit(i);
-                    System.out.println("Door unlocked.");
-                }
-            }
-            if (wall.getItem() != null) {
-                player.addItem(wall.getItem());
-                System.out.println("You grab " + wall.getItem().getName());
-            }
+            puzzleSolved(wall, room, player);
         } else {
             System.out.println("Wrong item.");
+        }
+    }
+
+    /**
+     * Helper method that handles when puzzle is successfully solved.
+     * @param wall the wall the player is interacting with
+     * @param room the room the player is currently in
+     * @param player the player playing the game
+     */
+    private static void puzzleSolved(Wall wall, Room room, Player player) {
+        System.out.println("Correct! Puzzle solved.");
+        for (int i = 0; i < 4; i++) {
+            if (room.getWalls()[i] == wall && room.isExitLocked(i)) {
+                room.unlockExit(i);
+                System.out.println("Door unlocked.");
+            }
+        }
+        if (wall.getItem() != null) {
+            player.addItem(wall.getItem());
+            System.out.println("You grab " + wall.getItem().getName());
         }
     }
 
