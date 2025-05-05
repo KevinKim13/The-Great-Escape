@@ -25,7 +25,7 @@ public class GameWorld {
         // Creating the rooms and adding them to array
         Room room1 = StartingRoom.initRoom();
         Room room2 = Room2.initRoom();
-        Room room3 = new Room("You are in a dim hallway with flickering lights.\nThere is another door with a peculiar looking lock.");
+        Room room3 = Room2.initRoom();
         Room room4 = new Room("You go upstairs and are now in a dingy kitchen.\nThe kidnapper is preoccupied with watching tv and eating.");
 
         rooms = new Room[] { room1, room2, room3, room4 };

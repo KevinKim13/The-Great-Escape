@@ -116,27 +116,20 @@ public class GameMain {
             System.out.println("Nothing to do here.");
             return;
         }
+        splitRoomInteractions(wall, room, scanner, player, actions);
+    }
+
+    /**
+     * Handles action input and sends to room specified wall interactions.
+     * @param wall the wall being interacted with
+     * @param room the current room
+     * @param scanner the scanner taking user input
+     * @param player current player
+     * @param actions list of actions possible
+     */
+    private static void splitRoomInteractions(Wall wall, Room room, Scanner scanner, Player player, String[] actions) {
         String action = "";
-        if (room == world.getRooms()[0]) {
-            while (!action.equalsIgnoreCase("Go Back")) {
-                for (int i = 0; i < actions.length; i++) {
-                    System.out.println((i + 1) + ". " + actions[i]);
-                }
-                System.out.print("> ");
-                int actionIndex = Integer.parseInt(scanner.nextLine()) - 1;
-                while (!(actionIndex < actions.length && actionIndex >= 0 )) {
-                    System.out.println("Invalid input. Enter a number 1-" + actions.length + ".");
-                    for (int i = 0; i < actions.length; i++) {
-                        System.out.println((i + 1) + ". " + actions[i]);
-                    }
-                    System.out.print("> ");
-                    actionIndex = Integer.parseInt(scanner.nextLine());
-                }
-                action = actions[actionIndex];
-                StartingRoom.wallInteraction(action, wall, room, scanner, player);
-            }
-        } else {
-            // TODO change this to other room logic.
+        while (!action.equalsIgnoreCase("Go Back")) {
             for (int i = 0; i < actions.length; i++) {
                 System.out.println((i + 1) + ". " + actions[i]);
             }
@@ -151,28 +144,15 @@ public class GameMain {
                 actionIndex = Integer.parseInt(scanner.nextLine());
             }
             action = actions[actionIndex];
-            if (action.equalsIgnoreCase("inspect")) {
-                System.out.println(wall.getInspectText());
-            } else if (action.equalsIgnoreCase("enter code") && wall.hasPuzzle()) {
-                System.out.println(wall.getPuzzle().getPrompt());
-                System.out.print("> ");
-                String input = scanner.nextLine().trim();
-                if (wall.getPuzzle().attempt(input)) {
-                    System.out.println("Correct! Puzzle solved.");
-                    for (int i = 0; i < 4; i++) {
-                        if (room.getWalls()[i] == wall && room.isExitLocked(i)) {
-                            room.unlockExit(i);
-                            System.out.println("A door has unlocked to the " + directions[i].toLowerCase() + ".");
-                        }
-                    }
-                } else {
-                    System.out.println("Wrong code.");
-                }
-            } else {
-                System.out.println("You can't do that here.");
+            if (room == world.getRooms()[0]) {
+                StartingRoom.wallInteraction(action, wall, room, scanner, player);
+            } else if (room == world.getRooms()[1]) {
+                Room2.wallInteraction(action, wall, room, scanner, player);
             }
+            
         }
     }
+
 
     /**
      * Lists the available directions to go and attempts to move player to inputted
