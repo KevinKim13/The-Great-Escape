@@ -23,13 +23,15 @@ public class GameMain {
         Scanner scanner = new Scanner(System.in);
         world.initialize();
         Player player = world.getPlayer();
-
+        boolean room3Flag = false;
         while (true) {
             Room currentRoom = player.getCurrentRoom();
-            if (currentRoom == world.getRooms()[2]) {
+            if (currentRoom == world.getRooms()[2] && !room3Flag) {
                 if (!Room3.enterRoom(player.getInventory(), scanner)) {
                     player.setCurrentRoom(world.getRooms()[1]);
                     currentRoom = player.getCurrentRoom();
+                } else {
+                    room3Flag = true;
                 }
             }
             System.out.println(
