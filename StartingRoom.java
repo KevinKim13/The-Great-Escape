@@ -73,12 +73,21 @@ public class StartingRoom {
             System.out.println("You check your inventory for useful items to try.");
             printInventory(player);
             System.out.print("> ");
-            int input = Integer.parseInt(scanner.nextLine());
-            while (input > player.getInventory().size() || input < 1) {
-                System.out.println("Please choose a number between 1-" + player.getInventory().size() + ".");
-                printInventory(player);
-                System.out.print("> ");
+            int input = -1;
+            try {
                 input = Integer.parseInt(scanner.nextLine());
+                while (input > player.getInventory().size() || input < 1) {
+                    System.out.println("Please choose a number between 1-" + player.getInventory().size() + ".");
+                    printInventory(player);
+                    System.out.print("> ");
+                    try {
+                        input = Integer.parseInt(scanner.nextLine()); 
+                    } catch (Exception d) {
+                    // Do Nothing 
+                    }
+                }
+            } catch (Exception e) {
+                //Do Nothing
             }
             item = player.getInventory().get(input - 1);
         } else { 
