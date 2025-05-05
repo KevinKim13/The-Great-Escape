@@ -13,6 +13,12 @@ import java.util.Scanner;
  */
 public class Room3 {
 
+    /**
+     * Creates and returns a room that holds a miniboss who cant be defeated without
+     * treats.
+     * 
+     * @return The room holding the miniboss and two walls.
+     */
     public static Room initRoom() {
         Room room3 = new Room(
                 "You glance up and see a staircase heading up. Above you hear footsteps and a TV turn on");
@@ -56,9 +62,15 @@ public class Room3 {
         return false;
     }
 
-    // somone needs to add dog treats
+    /**
+     * A helper method that checks the inventory for dog treats. It returns true
+     * when the player has dog treats and false when the player does not.
+     * 
+     * @param inventory The players inventory of items that is passed
+     * @return True if the player has Dog Treats, False if not.
+     */
     private static boolean fightBoss(List<Item> inventory) {
-
+        // loop through the inventry and check for Dog Treats item
         for (int i = 0; i < inventory.size(); i++) {
             if (inventory.get(i).getName().equals("Dog Treats")) {
                 System.out.println(
