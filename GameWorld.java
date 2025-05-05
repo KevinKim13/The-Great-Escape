@@ -26,7 +26,7 @@ public class GameWorld {
         Room room1 = StartingRoom.initRoom();
         Room room2 = Room2.initRoom();
         Room room3 = Room3.initRoom();
-        Room room4 = new Room("You go upstairs and are now in a dingy kitchen.\nThe kidnapper is preoccupied with watching tv and eating.");
+        Room room4 = RoomFinalBossBattle.initRoom();
 
         rooms = new Room[] { room1, room2, room3, room4 };
 

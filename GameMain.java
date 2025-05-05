@@ -32,6 +32,26 @@ public class GameMain {
                     currentRoom = player.getCurrentRoom();
                 }
             }
+            if (currentRoom == world.getRooms()[3]) {
+                boolean bossFightResult = RoomFinalBossBattle.enterRoom(player.getInventory(), scanner);
+                if (!bossFightResult) {
+                    // If the player loses the boss fight, allow them to retreat or reattempt
+                    System.out.println("You have lost the boss fight. You can try again or quit.");
+                    player.setCurrentRoom(world.getRooms()[2]);
+                    currentRoom = player.getCurrentRoom();
+                    // Optionally prompt for a retry or quit
+                    System.out.println("Would you like to try again? (yes/no)");
+                    String retry = scanner.nextLine().trim().toLowerCase();
+                    if (retry.equals("no")) {
+                        System.out.println("Game over! Thanks for playing!");
+                        return;
+                    }
+                } else {
+                    // If the player wins the boss fight
+                    System.out.println("Congratulations! You've defeated the boss and won the game!");
+                    return;  // Ends the game if the player wins
+                }
+            }
             System.out.println(
                     "----------------------------------------------------------------------------------------------------");
             System.out.println("\nLocation: " + currentRoom.getDescription());

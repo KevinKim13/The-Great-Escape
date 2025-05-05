@@ -11,11 +11,6 @@ import java.util.Scanner;
  */
 public class RoomFinalBossBattle {
 
-    /**
-     * Creates and returns a room that holds the final boss encounter.
-     * 
-     * @return The room holding the final boss and its interactive elements.
-     */
     public static Room initRoom() {
         Room room4 = new Room(
                 "You go upstairs and are now in a dingy kitchen.\nThe kidnapper is preoccupied with watching TV and eating.");
@@ -42,12 +37,11 @@ public class RoomFinalBossBattle {
     }
 
     /**
-     * Handles the final boss encounter. If the player defeats the kidnapper, they win. 
-     * If not, they must retreat.
+     * Handles the final boss encounter, but only interacts with the inventory and scanner for user input.
      * 
      * @param inventory The player's inventory.
      * @param sc The Scanner for user input.
-     * @return true if the boss is defeated and the player escapes; false otherwise.
+     * @return true if an item was used successfully, false otherwise.
      */
     public static boolean enterRoom(List<Item> inventory, Scanner sc) {
         System.out.println("====================================================================================================");
@@ -57,40 +51,40 @@ public class RoomFinalBossBattle {
 
         while (true) {
             System.out.println("\nWhat do you do?");
-            System.out.println("1. Try to talk him down");
-            System.out.println("2. Use an item from your inventory");
-            System.out.println("3. Attack him");
-            System.out.println("4. Retreat");
+            System.out.println("1. Inspect the kidnapper");
+            System.out.println("2. Talk to the kidnapper");
+            System.out.println("3. Use an item from your inventory");
+            System.out.println("4. Fight the kidnapper");
+            System.out.println("5. Retreat");
             String choice = sc.nextLine().trim();
 
             switch (choice) {
                 case "1":
-                    return tryTalkHimDown();
+                    System.out.println("You inspect the kidnapper closely.");
+                    break;
                 case "2":
-                    return useItem(inventory, sc);
+                    System.out.println("You try to talk to the kidnapper, but he isn't interested.");
+                    break;
                 case "3":
-                    return attackBoss();
+                    return useItem(inventory, sc);
                 case "4":
+                    System.out.println("You attempt to fight the kidnapper, but it is not effective without a weapon.");
+                    break;
+                case "5":
                     System.out.println("You retreat and head back to regroup.");
                     return false;
                 default:
-                    System.out.println("Invalid option. Please enter 1, 2, 3, or 4.");
+                    System.out.println("Invalid option. Please enter a number between 1 and 5.");
             }
         }
     }
 
     /**
-     * Attempts to talk down the kidnapper. Always fails.
-     */
-    private static boolean tryTalkHimDown() {
-        System.out.println("\nYou try to talk to the kidnapper, but he isn't interested.");
-        System.out.println("Kidnapper: 'I have nothing to say to you.'");
-        System.out.println("The kidnapper attacks you in response. You fail to talk him down.");
-        return false;
-    }
-
-    /**
      * Lets the player select and use an item from their inventory.
+     * 
+     * @param inventory The player's inventory.
+     * @param sc The Scanner for user input.
+     * @return true if an item was successfully used, false otherwise.
      */
     private static boolean useItem(List<Item> inventory, Scanner sc) {
         if (inventory.isEmpty()) {
@@ -121,10 +115,10 @@ public class RoomFinalBossBattle {
                 System.out.printf("You use the %s. Rolling for success... (Need ≤ %.2f)%n", 
                                   selectedItem.getName(), selectedItem.getChance());
                 if (roll <= selectedItem.getChance()) {
-                    System.out.println("Success! You defeat the kidnapper with the " + selectedItem.getName() + ".");
+                    System.out.println("Success! You use the " + selectedItem.getName() + " effectively.");
                     return true;
                 } else {
-                    System.out.println("You tried to use the " + selectedItem.getName() + ", but it failed. The kidnapper overpowers you.");
+                    System.out.println("You tried to use the " + selectedItem.getName() + ", but it failed.");
                     return false;
                 }
             } else {
@@ -136,15 +130,5 @@ public class RoomFinalBossBattle {
             System.out.println("Invalid input. Please enter a valid number.");
             return false;
         }
-    }
-
-    /**
-     * Player attacks without a weapon — always fails.
-     */
-    private static boolean attackBoss() {
-        System.out.println("\nYou charge at him, fists flying.");
-        System.out.println("The kidnapper fights back fiercely. You struggle, but he overpowers you.");
-        System.out.println("You are forced to retreat. A more strategic approach is needed.");
-        return false;
     }
 }
