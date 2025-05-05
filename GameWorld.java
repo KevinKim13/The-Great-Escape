@@ -41,7 +41,6 @@ public class GameWorld {
         // Locking all of the exits
         room1.lockExit(1);
         room2.lockExit(1);
-        room3.lockExit(1);
 
         // Creating all items
         // Item comboNote = new Item("Note with 4-digit code: 2115", "Key", 0.0);
