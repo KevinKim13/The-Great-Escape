@@ -26,7 +26,8 @@ public class Room3 {
         walls[0] = new Wall("There is a wall full of pictures of people in jail cells...",
                 "There is nothing behind the pictures");
         walls[0].setAvailableActions(new String[] { "inspect" });
-        walls[1] = new Wall("It's a door with a rotating letter lock.", "Nothing to do here.");
+        walls[1] = new Wall("There is a staircase heading upstairs.",
+                "Peering upstairs you can't see much but you get an eerie feeling");
         walls[1].setAvailableActions(new String[] { "inspect" });
         return room3;
     }
