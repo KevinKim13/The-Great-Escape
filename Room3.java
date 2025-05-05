@@ -25,9 +25,10 @@ public class Room3 {
         Wall[] walls = new Wall[4];
         walls[0] = new Wall("There is a wall full of pictures of people in jail cells...",
                 "There is nothing behind the pictures");
-        walls[0].setAvailableActions(new String[] { "inspect" });
+        walls[0].setAvailableActions(new String[] { "Inspect" });
         walls[1] = new Wall("It's a door with a rotating letter lock.", "Nothing to do here.");
-        walls[1].setAvailableActions(new String[] { "inspect" });
+        walls[1].setAvailableActions(new String[] { "Inspect" });
+        room3.setWalls(walls);
         return room3;
     }
 
@@ -72,7 +73,7 @@ public class Room3 {
     private static boolean fightBoss(List<Item> inventory) {
         // loop through the inventry and check for Dog Treats item
         for (int i = 0; i < inventory.size(); i++) {
-            if (inventory.get(i).getName().equals("Dog Treats")) {
+            if (inventory.get(i).getName().equals("Box of Dog Treats")) {
                 System.out.println(
                         "You pull out your dog treats and all of the sudden the dog looks friendly."
                                 + "After some treats and petting the dog curls up and rests in the corner.");
@@ -82,5 +83,23 @@ public class Room3 {
         System.out.println(
                 "You check you pockets but there is nothing to befriend the dog with so you head back to room 2.");
         return false;
+    }
+
+    /**
+     * Handles interaction with a wall in Room 2
+     * @param action the action to perform
+     * @param wall the wall to interact with
+     * @param room the current room
+     * @param scanner for user input
+     * @param player the game player
+     */
+    public static void wallInteraction(String action, Wall wall, Room room, Scanner scanner, Player player) {
+        if (action.equalsIgnoreCase("inspect")) {
+            System.out.println(wall.getInspectText());
+        } else if (action.equalsIgnoreCase("Go Back")) {
+            // Do nothing
+        } else {
+            System.out.println("You can't do that here.");
+        }
     }
 }

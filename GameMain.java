@@ -56,7 +56,7 @@ public class GameMain {
                     System.out.println("Thank you for playing! Goodbye!");
                     return;
                 default:
-                    System.out.println("Invalid option. Please enter a number between 1 and 7.");
+                    System.out.println("Invalid option. Please enter a number between 1 and 5.");
             }
         }
     }
@@ -148,6 +148,8 @@ public class GameMain {
                 StartingRoom.wallInteraction(action, wall, room, scanner, player);
             } else if (room == world.getRooms()[1]) {
                 Room2.wallInteraction(action, wall, room, scanner, player);
+            } else if (room == world.getRooms()[2]) {
+                Room3.wallInteraction(action, wall, room, scanner, player);
             }
             
         }
