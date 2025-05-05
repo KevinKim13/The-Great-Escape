@@ -23,13 +23,35 @@ public class GameMain {
         Scanner scanner = new Scanner(System.in);
         world.initialize();
         Player player = world.getPlayer();
-
+        boolean room3Flag = false;
         while (true) {
             Room currentRoom = player.getCurrentRoom();
-            if (currentRoom == world.getRooms()[2]) {
+            if (currentRoom == world.getRooms()[2] && !room3Flag) {
                 if (!Room3.enterRoom(player.getInventory(), scanner)) {
                     player.setCurrentRoom(world.getRooms()[1]);
                     currentRoom = player.getCurrentRoom();
+                } else {
+                    room3Flag = true;
+                }
+            }
+            if (currentRoom == world.getRooms()[3]) {
+                boolean bossFightResult = RoomFinalBossBattle.enterRoom(player.getInventory(), scanner);
+                if (!bossFightResult) {
+                    // If the player loses the boss fight, allow them to retreat or reattempt
+                    System.out.println("You have lost the boss fight. You can try again or quit.");
+                    player.setCurrentRoom(world.getRooms()[2]);
+                    currentRoom = player.getCurrentRoom();
+                    // Optionally prompt for a retry or quit
+                    System.out.println("Would you like to try again? (yes/no)");
+                    String retry = scanner.nextLine().trim().toLowerCase();
+                    if (retry.equals("no")) {
+                        System.out.println("Game over! Thanks for playing!");
+                        return;
+                    }
+                } else {
+                    // If the player wins the boss fight
+                    System.out.println("Congratulations! You've defeated the boss and won the game!");
+                    return;  // Ends the game if the player wins
                 }
             }
             System.out.println(
@@ -45,7 +67,6 @@ public class GameMain {
                     break;
                 case "2":
                     interactWall(scanner, currentRoom, player);
-                    // handleWallInspection(scanner, currentRoom);
                     break;
                 case "3":
                     handleMovement(scanner, currentRoom, player);
@@ -57,7 +78,7 @@ public class GameMain {
                     System.out.println("Thank you for playing! Goodbye!");
                     return;
                 default:
-                    System.out.println("Invalid option. Please enter a number between 1 and 7.");
+                    System.out.println("Invalid option. Please enter a number between 1 and 5.");
             }
         }
     }
@@ -69,7 +90,7 @@ public class GameMain {
     private static void printMenu() {
         System.out.println("\nWhat would you like to do?");
         System.out.println("1. Look at walls");
-        System.out.println("2. Interact with wall"); // TODO we can also get rid of this but I think we can keep it.
+        System.out.println("2. Interact with wall"); 
         System.out.println("3. Move");
         System.out.println("4. Check inventory");
         System.out.println("5. Quit");
@@ -91,6 +112,12 @@ public class GameMain {
         interactWall(scanner, room, player);
     }
 
+    /**
+     * Handle initial user input to direct wall interactions to correct methods.
+     * @param scanner the scanner taking user input
+     * @param room the current room
+     * @param player the player
+     */
     private static void interactWall(Scanner scanner, Room room, Player player) {
         System.out.println("Which wall would you like to examine further? (0-N, 1-E, 2-S, 3-W)");
         System.out.print("> ");
@@ -111,46 +138,42 @@ public class GameMain {
             System.out.println("Nothing to do here.");
             return;
         }
-        String action = "";
-        if (room == world.getRooms()[0]) {
-            while (!action.equalsIgnoreCase("Go Back")) {
-                for (int i = 0; i < actions.length; i++) {
-                    System.out.println((i + 1) + ". " + actions[i]);
-                }
-                System.out.print("> ");
-                int actionIndex = Integer.parseInt(scanner.nextLine()) - 1;
-                action = actions[actionIndex];
-                StartingRoom.wallInteraction(action, wall, room, scanner, player);
-            }
+        splitRoomInteractions(wall, room, scanner, player, actions);
+    }
 
-        } else {
-            // TODO change this to other room logic.
+    /**
+     * Handles action input and sends to room specified wall interactions.
+     * @param wall the wall being interacted with
+     * @param room the current room
+     * @param scanner the scanner taking user input
+     * @param player current player
+     * @param actions list of actions possible
+     */
+    private static void splitRoomInteractions(Wall wall, Room room, Scanner scanner, Player player, String[] actions) {
+        String action = "";
+        while (!action.equalsIgnoreCase("Go Back")) {
             for (int i = 0; i < actions.length; i++) {
                 System.out.println((i + 1) + ". " + actions[i]);
             }
             System.out.print("> ");
             int actionIndex = Integer.parseInt(scanner.nextLine()) - 1;
-            action = actions[actionIndex];
-            if (action.equalsIgnoreCase("inspect")) {
-                System.out.println(wall.getInspectText());
-            } else if (action.equalsIgnoreCase("enter code") && wall.hasPuzzle()) {
-                System.out.println(wall.getPuzzle().getPrompt());
-                System.out.print("> ");
-                String input = scanner.nextLine().trim();
-                if (wall.getPuzzle().attempt(input)) {
-                    System.out.println("Correct! Puzzle solved.");
-                    for (int i = 0; i < 4; i++) {
-                        if (room.getWalls()[i] == wall && room.isExitLocked(i)) {
-                            room.unlockExit(i);
-                            System.out.println("A door has unlocked to the " + directions[i].toLowerCase() + ".");
-                        }
-                    }
-                } else {
-                    System.out.println("Wrong code.");
+            while (!(actionIndex < actions.length && actionIndex >= 0 )) {
+                System.out.println("Invalid input. Enter a number 1-" + actions.length + ".");
+                for (int i = 0; i < actions.length; i++) {
+                    System.out.println((i + 1) + ". " + actions[i]);
                 }
-            } else {
-                System.out.println("You can't do that here.");
+                System.out.print("> ");
+                actionIndex = Integer.parseInt(scanner.nextLine());
             }
+            action = actions[actionIndex];
+            if (room == world.getRooms()[0]) {
+                StartingRoom.wallInteraction(action, wall, room, scanner, player);
+            } else if (room == world.getRooms()[1]) {
+                Room2.wallInteraction(action, wall, room, scanner, player);
+            } else if (room == world.getRooms()[2]) {
+                Room3.wallInteraction(action, wall, room, scanner, player);
+            }
+            
         }
     }
 
@@ -162,7 +185,6 @@ public class GameMain {
      * @param room    the player's current room
      * @param player  the game's player
      */
-    // TODO lets change this to just choose an exit instead of directions.
     private static void handleMovement(Scanner scanner, Room room, Player player) {
         String room4Desc = "You go upstairs and are now in a dingy kitchen.\nThe kidnapper is preoccupied with watching tv and eating.";
         for (int i = 0; i < 4; i++) {
@@ -170,6 +192,14 @@ public class GameMain {
         }
         System.out.print("> ");
         int dir = Integer.parseInt(scanner.nextLine());
+        while (dir < 0 || dir > 3) {
+            System.out.println("Invalid direction, choose 0-3.");
+            for (int i = 0; i < 4; i++) {
+                System.out.println(i + ". Go " + directions[i]);
+            }
+            System.out.print("> ");
+            dir = Integer.parseInt(scanner.nextLine());
+        }
         Room next = room.getExit(dir);
         if (player.getCurrentRoom().getDescription().equals(room4Desc) && dir == 1) {
             System.out.println("You ran out the backdoor and escaped! YOU WIN!");
@@ -179,15 +209,6 @@ public class GameMain {
                 Wall door = room.getWalls()[dir];
                 if (door != null && door.hasPuzzle()) {
                     System.out.println("This door's puzzle must be solved.");
-                } else {
-                    boolean hasKey = player.getInventory().stream().anyMatch(i -> i.getType().equals("Key"));
-                    if (hasKey) {
-                        room.unlockExit(dir);
-                        System.out.println("You used a key to unlock the door.");
-                        player.setCurrentRoom(next);
-                    } else {
-                        System.out.println("The door is locked and requires a key.");
-                    }
                 }
             } else {
                 player.setCurrentRoom(next);
@@ -196,8 +217,6 @@ public class GameMain {
         } else {
             System.out.println("You can't go that way.");
         }
-        // TODO ADD FINISH PATH + BOSS - IF THE PLAYER TRIES TO MOVE FROM ROOM 4 EAST
-        // AFTER BEATING KIDNAPPER, THEN THEY WIN
     }
 
     /**

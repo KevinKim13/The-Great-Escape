@@ -26,8 +26,7 @@ public class Room3 {
         walls[0] = new Wall("There is a wall full of pictures of people in jail cells...",
                 "There is nothing behind the pictures");
         walls[0].setAvailableActions(new String[] { "Inspect", "Go Back" });
-        walls[1] = new Wall("There is a staircase heading upstairs.",
-                "Peering upstairs you can't see much but you get an eerie feeling");
+        walls[1] = new Wall("It's a door with a staircase going up.", "Nothing to do here.");
         walls[1].setAvailableActions(new String[] { "Inspect", "Go Back" });
         room3.setWalls(walls);
         return room3;
@@ -88,12 +87,11 @@ public class Room3 {
 
     /**
      * Handles interaction with a wall in Room 2
-     * 
-     * @param action  the action to perform
-     * @param wall    the wall to interact with
-     * @param room    the current room
+     * @param action the action to perform
+     * @param wall the wall to interact with
+     * @param room the current room
      * @param scanner for user input
-     * @param player  the game player
+     * @param player the game player
      */
     public static void wallInteraction(String action, Wall wall, Room room, Scanner scanner, Player player) {
         if (action.equalsIgnoreCase("inspect")) {
