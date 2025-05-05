@@ -148,6 +148,19 @@ public class Room2 {
             wall.setItem(null);
         } else {
             System.out.println("There's nothing here to take.");
+    /**
+     * Prints the player's inventory to the terminal.
+     * @param player the game's player
+     */
+    private static void printInventory(Player player) {
+        ArrayList<Item> inv = (ArrayList<Item>) player.getInventory();
+        if (inv.isEmpty()) {
+            System.out.println("Your inventory is empty.");
+        } else {
+            System.out.println("Inventory:");
+            for (int i = 0; i < inv.size(); i++) {
+                Item item = inv.get(i);
+                System.out.println((i + 1) + ". " + item.getName() + " (" + item.getType() + ")");
+            }
         }
     }
-}
