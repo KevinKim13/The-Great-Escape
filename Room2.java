@@ -148,6 +148,9 @@ public class Room2 {
             wall.setItem(null);
         } else {
             System.out.println("There's nothing here to take.");
+        }
+    }
+
     /**
      * Prints the player's inventory to the terminal.
      * @param player the game's player
@@ -164,3 +167,4 @@ public class Room2 {
             }
         }
     }
+}
