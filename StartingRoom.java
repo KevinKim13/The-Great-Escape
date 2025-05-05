@@ -60,6 +60,12 @@ public class StartingRoom {
             printInventory(player);
             System.out.print("> ");
             int input = Integer.parseInt(scanner.nextLine());
+            while (input > player.getInventory().size() || input < 1) {
+                System.out.println("Please choose a number between 1-" + player.getInventory().size() + ".");
+                printInventory(player);
+                System.out.print("> ");
+                input = Integer.parseInt(scanner.nextLine());
+            }
             item = player.getInventory().get(input - 1);
         } else { 
             if (wall.getPuzzle().isSolved()) {

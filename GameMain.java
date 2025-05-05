@@ -37,7 +37,6 @@ public class GameMain {
                     break;
                 case "2":
                     interactWall(scanner, currentRoom, player);
-                    // handleWallInspection(scanner, currentRoom);
                     break;
                 case "3":
                     handleMovement(scanner, currentRoom, player);
@@ -62,7 +61,7 @@ public class GameMain {
     private static void printMenu() {
         System.out.println("\nWhat would you like to do?");
         System.out.println("1. Look at walls");
-        System.out.println("2. Interact with wall"); //TODO we can also get rid of this but I think we can keep it.
+        System.out.println("2. Interact with wall"); 
         System.out.println("3. Move");
         System.out.println("4. Check inventory");
         System.out.println("5. Quit");
@@ -111,6 +110,14 @@ public class GameMain {
                 }
                 System.out.print("> ");
                 int actionIndex = Integer.parseInt(scanner.nextLine()) - 1;
+                while (!(actionIndex < actions.length && actionIndex >= 0 )) {
+                    System.out.println("Invalid input. Enter a number 1-" + actions.length + ".");
+                    for (int i = 0; i < actions.length; i++) {
+                        System.out.println((i + 1) + ". " + actions[i]);
+                    }
+                    System.out.print("> ");
+                    actionIndex = Integer.parseInt(scanner.nextLine());
+                }
                 action = actions[actionIndex];
                 StartingRoom.wallInteraction(action, wall, room, scanner, player);
             }
@@ -122,6 +129,14 @@ public class GameMain {
             }
             System.out.print("> ");
             int actionIndex = Integer.parseInt(scanner.nextLine()) - 1;
+            while (!(actionIndex < actions.length && actionIndex >= 0 )) {
+                System.out.println("Invalid input. Enter a number 1-" + actions.length + ".");
+                for (int i = 0; i < actions.length; i++) {
+                    System.out.println((i + 1) + ". " + actions[i]);
+                }
+                System.out.print("> ");
+                actionIndex = Integer.parseInt(scanner.nextLine());
+            }
             action = actions[actionIndex];
             if (action.equalsIgnoreCase("inspect")) {
                 System.out.println(wall.getInspectText());
