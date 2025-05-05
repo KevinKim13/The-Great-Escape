@@ -23,13 +23,15 @@ public class GameMain {
         Scanner scanner = new Scanner(System.in);
         world.initialize();
         Player player = world.getPlayer();
-
+        boolean room3Flag = false;
         while (true) {
             Room currentRoom = player.getCurrentRoom();
-            if (currentRoom == world.getRooms()[2]) {
+            if (currentRoom == world.getRooms()[2] && !room3Flag) {
                 if (!Room3.enterRoom(player.getInventory(), scanner)) {
                     player.setCurrentRoom(world.getRooms()[1]);
                     currentRoom = player.getCurrentRoom();
+                } else {
+                    room3Flag = true;
                 }
             }
             if (currentRoom == world.getRooms()[3]) {
@@ -190,6 +192,14 @@ public class GameMain {
         }
         System.out.print("> ");
         int dir = Integer.parseInt(scanner.nextLine());
+        while (dir < 0 || dir > 3) {
+            System.out.println("Invalid direction, choose 0-3.");
+            for (int i = 0; i < 4; i++) {
+                System.out.println(i + ". Go " + directions[i]);
+            }
+            System.out.print("> ");
+            dir = Integer.parseInt(scanner.nextLine());
+        }
         Room next = room.getExit(dir);
         if (player.getCurrentRoom().getDescription().equals(room4Desc) && dir == 1) {
             System.out.println("You ran out the backdoor and escaped! YOU WIN!");
