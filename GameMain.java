@@ -1,3 +1,4 @@
+
 /**
  * Class: GameMain.java
  * @author Landen Burns, Kevin Kim, Shane Paton, Joseph Edwards, Will Krajcirik
@@ -14,7 +15,7 @@ import java.util.Scanner;
 public class GameMain {
 
     // Instance Variables -------------------------------------------
-    private static final String[] directions = {"North", "East", "South", "West"};
+    private static final String[] directions = { "North", "East", "South", "West" };
     private static final GameWorld world = new GameWorld();
 
     // Main Method --------------------------------------------------
@@ -25,7 +26,14 @@ public class GameMain {
 
         while (true) {
             Room currentRoom = player.getCurrentRoom();
-            System.out.println("----------------------------------------------------------------------------------------------------");
+            if (currentRoom == world.getRooms()[2]) {
+                if (!Room3.enterRoom(player.getInventory(), scanner)) {
+                    player.setCurrentRoom(world.getRooms()[1]);
+                    currentRoom = player.getCurrentRoom();
+                }
+            }
+            System.out.println(
+                    "----------------------------------------------------------------------------------------------------");
             System.out.println("\nLocation: " + currentRoom.getDescription());
 
             printMenu();
@@ -53,7 +61,6 @@ public class GameMain {
         }
     }
 
-
     // Methods ------------------------------------------------------
     /**
      * Prints the menu of the game and the player input line.
@@ -70,6 +77,7 @@ public class GameMain {
 
     /**
      * Lists available walls in the player's current room.
+     * 
      * @param room the player's current room
      */
     private static void handleWallListing(Scanner scanner, Room room, Player player) {
@@ -86,7 +94,7 @@ public class GameMain {
         System.out.println("Which wall would you like to examine further? (0-N, 1-E, 2-S, 3-W)");
         System.out.print("> ");
         int index = Integer.parseInt(scanner.nextLine());
-        while (!(index < 4 && index >= 0 )) {
+        while (!(index < 4 && index >= 0)) {
             System.out.println("Invalid input. Enter a number 0-3");
             System.out.println("Which wall would you like to examine further? (0-N, 1-E, 2-S, 3-W)");
             System.out.print("> ");
@@ -121,7 +129,7 @@ public class GameMain {
                 action = actions[actionIndex];
                 StartingRoom.wallInteraction(action, wall, room, scanner, player);
             }
-            
+
         } else {
             // TODO change this to other room logic.
             for (int i = 0; i < actions.length; i++) {
@@ -158,16 +166,18 @@ public class GameMain {
             } else {
                 System.out.println("You can't do that here.");
             }
-        } 
+        }
     }
 
     /**
-     * Lists the available directions to go and attempts to move player to inputted direction.
+     * Lists the available directions to go and attempts to move player to inputted
+     * direction.
+     * 
      * @param scanner the game's scanner
-     * @param room the player's current room
-     * @param player the game's player
+     * @param room    the player's current room
+     * @param player  the game's player
      */
-    //TODO lets change this to just choose an exit instead of directions.
+    // TODO lets change this to just choose an exit instead of directions.
     private static void handleMovement(Scanner scanner, Room room, Player player) {
         String room4Desc = "You go upstairs and are now in a dingy kitchen.\nThe kidnapper is preoccupied with watching tv and eating.";
         for (int i = 0; i < 4; i++) {
@@ -201,11 +211,13 @@ public class GameMain {
         } else {
             System.out.println("You can't go that way.");
         }
-        // TODO ADD FINISH PATH + BOSS - IF THE PLAYER TRIES TO MOVE FROM ROOM 4 EAST AFTER BEATING KIDNAPPER, THEN THEY WIN
+        // TODO ADD FINISH PATH + BOSS - IF THE PLAYER TRIES TO MOVE FROM ROOM 4 EAST
+        // AFTER BEATING KIDNAPPER, THEN THEY WIN
     }
 
     /**
      * Prints the player's inventory to the terminal.
+     * 
      * @param player the game's player
      */
     private static void printInventory(Player player) {
