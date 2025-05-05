@@ -6,7 +6,7 @@
  * Course: CSE 201 Spring 2025
  * Written: May 4, 2025
  * 
- * Purpose: Initializes room 2 
+ * Purpose: Initializes room 2 (cell block)
  */
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -25,9 +25,8 @@ public class Room2 {
         
         // Create items for the room
         Item dogTreats = new Item("Box of Dog Treats", "Treats", 0.1);
-        Item comboNote = new Item("Note with 4-digit code: 2115", "Key", 0.0);
         Item woodenBat = new Item("Broken Chair Leg", "Weapon", 0.4);
-        
+    
         // Initialize the walls array
         Wall[] r2Walls = new Wall[4];
         
@@ -42,11 +41,11 @@ public class Room2 {
                              "It requires a 4-digit code. You can hear faint snoring coming from the other side.");
         r2Walls[1].setPuzzle(new InputLockPuzzle("Enter 4-digit code:", "2115"));
         
-        // South Wall - Contains cells with the code note
+        // South Wall - Contains cells with the code note description
         r2Walls[2] = new Wall("It's another row of cells along the south wall. One cell has a scrap of paper on the floor.",
                              "You peer into the cells. One contains a piece of paper just within reach between the bars.\n" +
+                             "You stretch your arm and grab it. The note reads: \"4-digit code: 2115\"\n" +
                              "Another cell has dried bloodstains on the floor, and a third has tallies scratched into the wall.");
-        r2Walls[2].setItem(comboNote);
         
         // West Wall - Door back to your cell and the wooden chair
         r2Walls[3] = new Wall("An old rickety wooden chair sits against the west wall near the door back to your cell.", 
@@ -59,7 +58,7 @@ public class Room2 {
         
         r2Walls[0].setAvailableActions(actionSet2); // North wall - has dog treats
         r2Walls[1].setAvailableActions(actionSet1); // East wall - has code puzzle
-        r2Walls[2].setAvailableActions(actionSet2); // South wall - has note
+        r2Walls[2].setAvailableActions(new String[] {"Inspect", "Go Back"}); // South wall - just description with code
         r2Walls[3].setAvailableActions(actionSet2); // West wall - has chair leg
         
         // Set the walls to the room
@@ -80,7 +79,7 @@ public class Room2 {
         if (action.equalsIgnoreCase("inspect")) {
             System.out.println(wall.getInspectText());
         } else if (action.equalsIgnoreCase("Try Puzzle")) {
-            tryLock(wall, room, scanner, player);
+            tryLock(wall, room, scanner);
         } else if (action.equalsIgnoreCase("Take Item")) {
             takeItem(wall, player);
         } else if (action.equalsIgnoreCase("Go Back")) {
@@ -95,11 +94,9 @@ public class Room2 {
      * @param wall the wall with the puzzle
      * @param room the current room
      * @param scanner for user input
-     * @param player the game player
      */
-    private static void tryLock(Wall wall, Room room, Scanner scanner, Player player) {
+    private static void tryLock(Wall wall, Room room, Scanner scanner) {
         if (wall.hasPuzzle() && wall.getPuzzle() instanceof InputLockPuzzle) {
-            // This is for the east door with keypad
             InputLockPuzzle puzzle = (InputLockPuzzle) wall.getPuzzle();
             
             if (puzzle.isSolved()) {
@@ -107,67 +104,20 @@ public class Room2 {
                 return;
             }
             
-            // Check if player has found the note with the code
-            boolean hasCode = false;
-            for (Item item : player.getInventory()) {
-                if (item.getName().contains("code")) {
-                    hasCode = true;
-                    break;
-                }
-            }
+            System.out.println(puzzle.getPrompt());
+            System.out.print("> ");
+            String input = scanner.nextLine().trim();
             
-            if (hasCode) {
-                System.out.println("You have a note with the code: 2115");
-                System.out.println(puzzle.getPrompt());
-                System.out.print("> ");
-                String input = scanner.nextLine().trim();
-                
-                if (puzzle.attempt(input)) {
-                    System.out.println("Correct! The keypad beeps and the door unlocks.");
-                    for (int i = 0; i < 4; i++) {
-                        if (room.getWalls()[i] == wall && room.isExitLocked(i)) {
-                            room.unlockExit(i);
-                            System.out.println("The east door is now unlocked. You hear snoring on the other side.");
-                        }
-                    }
-                } else {
-                    System.out.println("Wrong code. The keypad flashes red.");
-                }
-            } else {
-                System.out.println("You don't know the code. Maybe look around for clues?");
-            }
-        } else if (wall.hasPuzzle() && wall.getPuzzle() instanceof ItemLockPuzzle) {
-            // This is for the ItemLockPuzzle type
-            Item item = null;
-            if (!player.getInventory().isEmpty() && !wall.getPuzzle().isSolved()) {
-                System.out.println(wall.getPuzzle().getPrompt());
-                System.out.println("You check your inventory for useful items to try.");
-                printInventory(player);
-                System.out.print("> ");
-                int input = Integer.parseInt(scanner.nextLine());
-                item = player.getInventory().get(input - 1);
-            } else { 
-                if (wall.getPuzzle().isSolved()) {
-                    System.out.println("Puzzle already complete.");
-                } else {
-                    System.out.println("You don't have anything useful. Maybe search around the room?");
-                }
-                return;               
-            }
-            if (((ItemLockPuzzle)wall.getPuzzle()).attempt(item)) {
-                System.out.println("Correct! Puzzle solved.");
+            if (puzzle.attempt(input)) {
+                System.out.println("Correct! The keypad beeps and the door unlocks.");
                 for (int i = 0; i < 4; i++) {
                     if (room.getWalls()[i] == wall && room.isExitLocked(i)) {
                         room.unlockExit(i);
-                        System.out.println("Door unlocked.");
+                        System.out.println("The east door is now unlocked. You hear snoring from the other side.");
                     }
                 }
-                if (wall.getItem() != null) {
-                    player.addItem(wall.getItem());
-                    System.out.println("You grab " + wall.getItem().getName());
-                }
             } else {
-                System.out.println("Wrong item.");
+                System.out.println("Wrong code. The keypad flashes red.");
             }
         } else {
             System.out.println("There's no puzzle to solve here.");
@@ -188,9 +138,6 @@ public class Room2 {
             if (item.getName().contains("Dog Treats")) {
                 System.out.println("You reach through the bars and grab the box of dog treats.");
                 System.out.println("These might come in handy if there's a guard dog nearby.");
-            } else if (item.getName().contains("code")) {
-                System.out.println("You carefully reach between the bars and grab the note.");
-                System.out.println("It reads: \"4-digit code: 2115\" - this might open the east door.");
             } else if (item.getName().contains("Chair Leg")) {
                 System.out.println("You break off one of the chair legs to use as a makeshift weapon.");
                 System.out.println("It's not very sturdy, but it's better than nothing.");
@@ -201,23 +148,6 @@ public class Room2 {
             wall.setItem(null);
         } else {
             System.out.println("There's nothing here to take.");
-        }
-    }
-    
-    /**
-     * Prints the player's inventory to the terminal.
-     * @param player the game's player
-     */
-    private static void printInventory(Player player) {
-        ArrayList<Item> inv = (ArrayList<Item>) player.getInventory();
-        if (inv.isEmpty()) {
-            System.out.println("Your inventory is empty.");
-        } else {
-            System.out.println("Inventory:");
-            for (int i = 0; i < inv.size(); i++) {
-                Item item = inv.get(i);
-                System.out.println((i + 1) + ". " + item.getName() + " (" + item.getType() + ")");
-            }
         }
     }
 }
