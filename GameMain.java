@@ -153,7 +153,6 @@ public class GameMain {
         }
     }
 
-
     /**
      * Lists the available directions to go and attempts to move player to inputted
      * direction.
@@ -162,7 +161,6 @@ public class GameMain {
      * @param room    the player's current room
      * @param player  the game's player
      */
-    // TODO lets change this to just choose an exit instead of directions.
     private static void handleMovement(Scanner scanner, Room room, Player player) {
         String room4Desc = "You go upstairs and are now in a dingy kitchen.\nThe kidnapper is preoccupied with watching tv and eating.";
         for (int i = 0; i < 4; i++) {
