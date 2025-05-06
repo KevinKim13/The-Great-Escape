@@ -178,7 +178,7 @@ public class GameMain {
             System.out.print("> ");
             int actionIndex = -1;
             try {
-                actionIndex = Integer.parseInt(scanner.nextLine());
+                actionIndex = Integer.parseInt(scanner.nextLine()) - 1;
                 while (!(actionIndex < actions.length && actionIndex >= 0 )) {
                     System.out.println("Invalid input. Enter a number 1-" + actions.length + ".");
                     for (int i = 0; i < actions.length; i++) {
@@ -186,7 +186,7 @@ public class GameMain {
                     }
                     System.out.print("> ");
                     try {
-                        actionIndex = Integer.parseInt(scanner.nextLine()); 
+                        actionIndex = Integer.parseInt(scanner.nextLine()) - 1; 
                     } catch (Exception d) {
                     // Do Nothing 
                     }
@@ -199,7 +199,7 @@ public class GameMain {
                     }
                     System.out.print("> ");
                     try {
-                        actionIndex = Integer.parseInt(scanner.nextLine()); 
+                        actionIndex = Integer.parseInt(scanner.nextLine()) - 1; 
                     } catch (Exception d) {
                     // Do Nothing 
                     }
