@@ -76,7 +76,7 @@ public class Room3 {
             if (inventory.get(i).getName().equals("Box of Dog Treats")) {
                 System.out.println(
                         "You pull out your dog treats and all of the sudden the dog looks friendly."
-                                + "After some treats and petting the dog curls up and rests in the corner.");
+                                + " After some treats and petting the dog curls up and rests in the corner.");
                 return true;
             }
         }
